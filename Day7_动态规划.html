@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Day 7 · 动态规划与混合验收（15 题）</title><style>
+:root{--ink:#172c35;--muted:#637579;--line:#dce5e2;--paper:#fff;--bg:#f3f5f1;--green:#176c58;--soft:#e8f2ed;--gold:#bb8540}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.75 "Segoe UI","Microsoft YaHei","PingFang SC",sans-serif}button,input,select,textarea{font:inherit}button,a,select,summary{-webkit-tap-highlight-color:transparent}button,select,summary{cursor:pointer}button,a,select,input,textarea,summary{outline-offset:4px}button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #33856f}a{color:var(--green);text-underline-offset:4px}button{min-height:44px;border:1px solid var(--line);background:white;color:var(--ink);border-radius:10px;padding:8px 14px}button:hover{border-color:var(--green);background:var(--soft)}button:disabled{opacity:.4;cursor:default}h1,h2,h3,p{margin-top:0}h2{font-size:24px;line-height:1.45}h3{font-size:17px}small,.muted{color:var(--muted)}.shell{max-width:1320px;margin:auto;padding:28px 32px 60px}.topline{display:flex;justify-content:space-between;align-items:center;gap:15px;padding-bottom:22px}.brand{font-size:15px;font-weight:800;letter-spacing:1px}.brand i{font-style:normal;background:var(--green);color:#fff;padding:6px 9px;border-radius:8px;margin-right:9px}.topline a{font-size:13px}.hero{position:relative;overflow:hidden;background:#163e36;color:white;border-radius:24px;padding:38px 42px;display:grid;grid-template-columns:1.6fr 1fr;gap:40px}.hero:after{content:'';position:absolute;width:290px;height:290px;border:1px solid #ffffff12;border-radius:50%;right:-60px;top:-135px;pointer-events:none}.eyebrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#b2cfc4;font-weight:700}.hero h1{font-size:clamp(28px,3.5vw,44px);font-weight:750;line-height:1.3;letter-spacing:-1px;margin:15px 0}.hero p{color:#c8dbd3;margin-bottom:0;max-width:650px}.hero-metrics{display:grid;grid-template-columns:1fr 1fr;align-content:center;gap:22px}.hero-metrics b{font-size:34px;font-weight:500;display:block;line-height:1.2}.hero-metrics span{font-size:12px;color:#b2cfc4}.hero-metrics b small{font-size:14px;color:inherit}.strip{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 26px}.strip span{font-size:12px;color:var(--muted);background:white;border:1px solid var(--line);padding:5px 12px;border-radius:99px}.layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:28px;align-items:start}.sidebar{position:sticky;top:18px}.label{font-size:11px;letter-spacing:1.5px;color:var(--muted);font-weight:700;margin:0 0 12px}.days{display:grid;gap:7px}.day-button{text-align:left;padding:13px 15px;display:grid;grid-template-columns:40px 1fr;align-items:center;gap:8px;border-color:transparent;background:transparent}.day-button strong{font-size:16px}.day-button span{font-size:13px;display:block;font-weight:650}.day-button small{font-size:11px;display:block;font-weight:400}.day-button[aria-current="step"]{background:var(--green);color:white;border-color:var(--green)}.day-button[aria-current="step"] small{color:#c4ded3}.side-progress{padding:20px 15px;margin-top:20px;border-top:1px solid var(--line);font-size:12px}.side-progress b{font-size:23px;color:var(--green)}progress{width:100%;height:7px;border:none;display:block;margin:10px 0;accent-color:var(--green);border-radius:9px;overflow:hidden}progress::-webkit-progress-bar{background:#dfe9e2}progress::-webkit-progress-value{background:var(--green)}.side-progress p{margin:8px 0}.content{min-width:0}.card{background:white;border:1px solid var(--line);border-radius:18px;padding:25px;margin-bottom:20px}.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.card-head h3{margin:0}.card-head span{font-size:12px;color:var(--muted)}.schedule{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;margin-top:20px}.slot{border-top:3px solid #c8d9ca;padding-top:10px}.slot:nth-child(3){border-color:var(--green)}.slot:nth-child(4){border-color:var(--gold)}.slot b{display:block;font-size:23px;line-height:1.4}.slot b small{font-size:11px;font-weight:400}.slot span{font-size:12px}.rhythm{font-size:13px;color:var(--muted);margin:15px 0 0}.panel{scroll-margin-top:20px}.day-kicker{color:var(--green);font-weight:700;font-size:12px;letter-spacing:1px;margin-bottom:7px}.panel h2{margin:0 0 9px}.day-meta{color:var(--muted);font-size:13px;margin-bottom:20px}.insights{display:grid;gap:10px;margin-bottom:20px}.insight{padding:13px 15px;border-left:3px solid #aacabb;background:#f4f8f4;font-size:14px}.insight p{margin:0}.insight strong{color:var(--green)}.lesson-link{display:inline-flex;align-items:center;min-height:44px;margin-bottom:18px;font-size:14px;font-weight:650}.tools{display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap;padding:18px 0;border-top:1px solid var(--line)}.filters{display:flex;gap:5px;flex-wrap:wrap}.filters button{font-size:13px;min-height:44px;padding:7px 11px}.filters button[aria-pressed="true"]{background:var(--ink);color:white;border-color:var(--ink)}.search{display:flex;align-items:center;flex:1;min-width:180px;max-width:290px}.search input{min-height:44px;width:100%;min-width:0;background:#f8faf7;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:13px}.result-info{font-size:12px;color:var(--muted);margin:0 0 10px}.problem-row{display:grid;grid-template-columns:45px minmax(0,1fr) 146px;gap:13px;align-items:center;padding:14px 0;border-top:1px solid #edf1ec}.number{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}.problem-title{font-size:14px;font-weight:650;overflow-wrap:anywhere}.problem-title a{color:var(--ink);text-decoration:none}.problem-title a:hover{color:var(--green);text-decoration:underline}.problem-sub{display:flex;flex-wrap:wrap;gap:8px;font-size:11px;color:var(--muted);margin-top:5px}.badge{display:inline-block;color:var(--green);font-weight:600;background:var(--soft);padding:1px 7px;border-radius:5px}.badge.b{background:#f5efdf;color:#8a622a}.status{width:100%;min-height:44px;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:12px;background:white;color:var(--muted)}.status.green{color:#126443;background:#eef8f0}.status.yellow{color:#88630e;background:#fff8dd}.status.red{color:#a74238;background:#fff0ec}.status.covered{color:#375979;background:#eef3f9}.empty{text-align:center;color:var(--muted);padding:35px 10px}.legend{font-size:12px;color:var(--muted);padding:15px;background:#f8faf7;border-radius:10px;margin-top:12px}.day-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:22px}.day-footer span{font-size:12px;color:var(--muted)}.reflection label{display:block;font-size:14px;font-weight:650;margin-bottom:8px}.reflection textarea{width:100%;min-height:92px;resize:vertical;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fbfcfa;color:var(--ink)}.checkline{display:flex!important;gap:9px;align-items:center;min-height:44px;margin-top:12px;font-size:13px!important;font-weight:400!important}.checkline input{width:19px;height:19px;accent-color:var(--green);flex-shrink:0}.reflection small{display:block;font-size:12px}.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.bottom-grid .card{margin-bottom:18px}.bottom-grid p,.bottom-grid li{font-size:13px;color:var(--muted)}ol,ul{padding-left:22px}.reference summary{font-weight:650;min-height:44px;display:list-item;align-content:center}.reference summary small{font-weight:400}.reference-body{border-top:1px solid var(--line);margin-top:14px;padding-top:20px;font-size:14px}.reference-body h1{font-size:24px}.reference-body h2{font-size:21px;margin-top:30px}.reference-body h3{font-size:17px;margin-top:22px}.table-wrap{overflow:auto}.reference table{border-collapse:collapse;min-width:540px;width:100%;font-size:13px}.reference th,.reference td{padding:10px;text-align:left;border-bottom:1px solid var(--line)}.reference th{background:var(--soft)}.reference code{background:var(--soft);padding:2px 4px}.foot{display:flex;justify-content:space-between;align-items:center;gap:15px;color:var(--muted);font-size:12px;padding:8px 0}.foot button{font-size:12px}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:10;background:var(--ink);color:#fff;padding:10px 20px;border-radius:12px;max-width:90vw;font-size:13px}.toast:empty{display:none}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}[hidden]{display:none!important}
+@media(max-width:950px){.shell{padding:20px}.hero{padding:28px;gap:25px}.layout{grid-template-columns:180px minmax(0,1fr);gap:18px}.day-button{padding:11px 8px;grid-template-columns:30px 1fr}.card{padding:20px}.schedule{grid-template-columns:repeat(3,minmax(0,1fr))}.bottom-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.shell{padding:14px 12px 30px}.topline{padding-bottom:15px}.topline a{font-size:12px}.hero{grid-template-columns:1fr;padding:25px;gap:24px;border-radius:18px}.hero h1{font-size:29px}.hero p{font-size:13px}.hero-metrics{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.hero-metrics b{font-size:25px}.hero-metrics span{font-size:10px}.hero-metrics b small{font-size:11px}.layout{display:block}.sidebar{position:static}.sidebar>.label,.side-progress{display:none}.days{grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-bottom:18px}.day-button{display:block;text-align:center;padding:8px 2px;border:1px solid var(--line);background:white;min-height:60px}.day-button strong{font-size:15px}.day-button span{font-size:10px}.day-button small{display:none}.card{padding:18px;border-radius:15px}.card-head h3{font-size:16px}.card-head span{font-size:11px}.panel h2{font-size:23px}.insight{font-size:13px}.search{max-width:none;flex-basis:100%}.tools{gap:10px}.problem-row{grid-template-columns:30px minmax(0,1fr) 113px;gap:8px}.problem-title{font-size:13px}.status{font-size:11px;padding:5px 3px}.day-footer button{font-size:12px;padding:8px 10px}.day-footer span{font-size:11px}.foot{align-items:flex-start}.strip{margin-bottom:18px;gap:6px}.strip span{font-size:11px;padding:4px 8px}}
+@media(max-width:350px){.card{padding:14px}.hero{padding:20px}.hero h1{font-size:26px}.problem-row{grid-template-columns:28px minmax(0,1fr)}.problem-row select{grid-column:2;width:145px}.filters button{padding:7px 9px}.card-head{flex-wrap:wrap}.hero-metrics b{font-size:23px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{body{background:white}.shell{padding:0}.topline,.hero,.strip,.layout,.foot,.toast{display:none}.reference{display:block!important;border:0;padding:0}.reference summary{display:none}.reference-body{display:block!important;border:0}.reference-body h3{break-after:avoid}.table-wrap{overflow:visible}.reference table{min-width:0}}
+
+.lesson-head{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px}.lesson-head h2{margin:0;flex:1;min-width:160px}.no{background:var(--green);color:#fff;min-width:44px;height:44px;border-radius:12px;text-align:center;line-height:44px;font-weight:700}.lesson{scroll-margin-top:90px}.lesson h3{margin-top:22px;color:var(--green);font-size:16px}.lesson p{font-size:14px;line-height:1.85}.task{border-left:3px solid var(--green);background:#f0f6f1;padding:13px 16px;border-radius:0 10px 10px 0}.task small{display:block}.trace{padding-left:24px}.trace li{padding:6px 0;font-size:14px}.code-tabs{display:flex;gap:8px;margin:16px 0 9px;flex-wrap:wrap}.code-tabs button[aria-selected=true]{background:var(--green);color:white;border-color:var(--green)}pre{max-width:100%;overflow:auto;background:#142d2d;color:#e5f2e8;border-radius:12px;padding:18px;font:13px/1.8 Consolas,'Cascadia Mono',monospace;tab-size:4}.code-note{color:var(--muted);font-size:12px!important}.code-actions{display:flex;justify-content:space-between;gap:12px;align-items:center}.code-actions small{font-size:12px}.quiz{background:#faf8f0;border:1px solid #e6dfcc;border-radius:12px;padding:16px;margin-top:18px}.quiz p{margin-bottom:10px}.quiz summary{font-size:13px;min-height:44px;align-content:center}.quiz details p{margin-top:10px}.lesson .status{width:150px}.problem-nav{display:grid;gap:5px;max-height:65vh;overflow:auto;overscroll-behavior:contain}.problem-nav a{display:flex;align-items:center;gap:8px;min-height:44px;font-size:12px;padding:7px 10px;border-radius:8px;color:var(--muted);text-decoration:none}.problem-nav a:hover{background:var(--soft);color:var(--green)}.problem-nav a b{min-width:28px}.navline{position:sticky;top:0;z-index:5;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 0;background:var(--bg);margin-bottom:18px}.navline a,.navline select{font-size:13px;min-height:44px}.navline select{border:1px solid var(--line);border-radius:10px;background:white;padding:8px;max-width:45%}.mobile-jump{display:none}.lesson .reference-body{font-size:13px}.outline{background:var(--soft);padding:14px;border-radius:12px}.intro-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.intro-grid>div{background:#f6f8f3;padding:15px;border-radius:12px}.intro-grid h3{font-size:15px}.intro-grid p{font-size:13px;margin:0}.lesson-actions{display:flex;gap:8px;flex-wrap:wrap}.jump-link{font-size:13px}.day-end{margin-top:25px}.daylinks{display:flex;justify-content:space-between;gap:14px;margin:25px 0}.table-wrap{max-width:100%;overflow:auto}.card table{width:100%;border-collapse:collapse;font-size:13px}.card td,.card th{padding:10px;text-align:left;border-bottom:1px solid var(--line)}.sidebar{top:85px}.trace code{white-space:normal}.lesson:target{outline:2px solid #a9cbbb;outline-offset:3px}.lesson details[open]{margin-bottom:10px}
+@media(max-width:950px){.intro-grid{grid-template-columns:1fr}.lesson-head h2{font-size:21px}}
+@media(max-width:700px){.problem-nav,.sidebar{display:none}.mobile-jump{display:block;margin-bottom:18px}.mobile-jump select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:10px;background:white;padding:10px}.lesson{scroll-margin-top:80px}.lesson-head h2{min-width:160px;font-size:20px}.lesson .status{width:100%}.lesson-head{gap:10px}.task{padding:12px}.navline{font-size:12px;gap:8px}.navline a{display:flex;align-items:center}.navline select{font-size:12px}.lesson p{font-size:14px}.lesson-head .badge{font-size:12px}.code-actions{align-items:flex-start}.code-actions button{white-space:nowrap}.topline{flex-wrap:wrap}pre{padding:14px;font-size:12px}.card table{min-width:500px}}
+@media print{.layout{display:block}.content{display:block}.lesson{break-inside:auto}.lesson-head{break-after:avoid}.sidebar,.navline,.mobile-jump,.code-tabs,.code-actions,.status,.hero,.topline,.daylinks{display:none!important}.code-pane[hidden]{display:block!important}.code-pane.mem{display:none!important}pre{white-space:pre-wrap;background:#f4f4f4;color:black}.card{box-shadow:none}.shell{padding:0}}
+</style><style id="reading-typography">
+/* Reading typography: one scale for body, code and navigation. */
+:root{--read-body:19px;--read-code:17px;--read-small:16px;--read-ui:16px;--muted:#4c6067}
+:root[data-reading-size="large"]{--read-body:21px;--read-code:19px;--read-small:17px;--read-ui:17px}
+:root[data-reading-size="largest"]{--read-body:23px;--read-code:21px;--read-small:18px;--read-ui:18px}
+body{font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",system-ui,sans-serif;font-size:var(--read-body);line-height:1.85;color:#20323c;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+p,li{line-height:1.85}
+main p,main li{max-width:46em}
+.statement p,.lesson p,.reasoning p,.self-test p,.intro-grid p,.bottom-grid p,.bottom-grid li,.insight,.reference-body,.reference-body p,.reference-body li,ul.clean,.trace li,.trace-note,.example div,.pattern-grid p,.explain li div,.bridge span,.route-card p,.section-sub,.hero p,.rhythm{font-size:var(--read-body)!important;line-height:1.85!important;color:#304552}
+.hero p{color:#e2eee8}
+p{margin-bottom:1em}
+.reasoning h5,.pattern-grid b,.bridge strong,.explain li strong,.example strong,.statement-head,.subhead,.pattern-title,.template h4,.quiz summary,.lesson h3{font-size:calc(var(--read-body) + 1px)!important;line-height:1.65;color:#1c5b76}
+.prob-title,.lesson-head h2{font-size:calc(var(--read-body) + 7px);line-height:1.5}
+section h2,.panel h2{font-size:calc(var(--read-body) + 9px);line-height:1.45}
+h3,.card-head h3{font-size:calc(var(--read-body) + 3px)}
+.one-line,.key-box{font-size:var(--read-body);line-height:1.85}
+pre,pre.codeblock,.code-pane{font-family:Consolas,"Cascadia Mono","Microsoft YaHei",monospace;font-size:var(--read-code)!important;line-height:1.85!important;padding:22px;tab-size:4;font-variant-ligatures:none}
+pre code{font:inherit!important;line-height:inherit!important;white-space:inherit}
+.statement code,.trace-state,code:not(pre code){font-size:var(--read-code);overflow-wrap:anywhere}
+.trace-state{line-height:1.85;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+small,.source-note,.scroll-hint,.code-note,.code-actions small,.muted,.foot,.legend,.result-info,.day-meta,.reflection small,.card-head span,.hero-metrics span,.slot span,.slot b small,.side-progress,.reference summary small,.day-footer span,.tag,.badge,.problem-sub,.rule,.step,.range span,.mistake,.mistake div,.pill,.topline a,.day-kicker,.eyebrow,.label,.strip span{font-size:var(--read-small)!important;line-height:1.7!important;color:#4c6067}
+.hero .eyebrow,.hero small,.hero-metrics span,.hero .rule{color:#d7e8de}
+button,.action,.nav-action,.mini-action,.status-row button,.focus-toggle,.code-tab,.filters button,.sidebar-toggle,.status,.lesson .status,select,input,textarea,.search input,.reflection label,.checkline,.navline a,.navline select,.topline a,.lesson-link,.day-footer button,.foot button,.jump-link,summary,.official-link{font-size:var(--read-ui)!important;line-height:1.6;min-height:46px}
+button,.action,.mini-action{padding:10px 14px}
+.status,.lesson .status{min-width:0;width:170px;font-size:var(--read-ui)!important}
+.problem-title{font-size:var(--read-body);line-height:1.7}
+.problem-row{grid-template-columns:50px minmax(0,1fr) 170px;gap:16px;padding:20px 0}
+.number{font-size:var(--read-ui)}
+.problem-nav a,aside a span,.day-button span{font-size:var(--read-ui)!important;line-height:1.7;color:#304552}
+.problem-nav a{padding:10px 12px;min-height:48px}.problem-nav a b{min-width:38px}
+aside a small,.brand small,.day-button small{font-size:var(--read-small)!important;line-height:1.65;color:#516679}
+aside a{padding:13px 12px}.day-button[aria-current="step"] span{color:#fff}.day-button[aria-current="step"] small{color:#e1efe7}
+.problem-index{grid-template-columns:1fr;gap:7px}.problem-index button{font-size:var(--read-ui);text-align:left;line-height:1.7;padding:10px 12px}
+.grid-body{grid-template-columns:minmax(0,1fr)}.left{border-right:0;border-bottom:1px dashed #d9e1e8}
+.example-grid,.pattern-grid,.bridge{grid-template-columns:minmax(0,1fr)}
+.example{padding:17px 19px}.pattern-grid>div{padding:16px 18px}.bridge li{padding:16px 18px}
+.example strong,.pattern-grid b{margin-bottom:8px}.trace li{padding:12px 0 12px 20px}.trace-note{margin-top:8px}
+.statement,.left,.right,.pattern-box,.reasoning,.self-test{padding:24px 26px}
+.explain{padding:20px}.explain li+li{margin-top:14px}.reasoning h5{margin-top:24px}.reasoning p{margin-bottom:20px}
+.card{padding:28px}.intro-grid{grid-template-columns:minmax(0,1fr)}.intro-grid>div{padding:19px}
+.card table,.reference table,table{font-size:var(--read-small)!important;line-height:1.8}td,th{padding:14px!important}
+.search{max-width:340px;min-width:240px}.navline{flex-wrap:wrap}.navline select{max-width:100%;min-width:0}
+.layout{grid-template-columns:280px minmax(0,1fr)}.shell{max-width:1440px}.day-button{grid-template-columns:38px minmax(0,1fr)}
+.sidebar .problem-nav{max-height:calc(100dvh - 155px)}
+.reader-settings{position:fixed;right:18px;bottom:20px;z-index:180;margin:0;border:1px solid #b7c7c4;border-radius:14px;background:#fff;box-shadow:0 8px 28px #152e3020;padding:0;font-size:16px;color:#263d43;max-width:calc(100vw - 24px)}
+.reader-settings>summary{padding:11px 16px;font-size:16px!important;min-height:48px;cursor:pointer;list-style:none;color:#234e49;font-weight:700}
+.reader-settings>summary::-webkit-details-marker{display:none}.reader-settings>summary::after{content:' ▴'}.reader-settings[open]>summary::after{content:' ▾'}
+.reader-settings-panel{width:290px;max-width:calc(100vw - 26px);padding:0 16px 16px;border-top:1px solid #e0e8e5}
+.reader-settings-panel label{display:block;margin:12px 0 8px;font-size:16px}.reader-settings-panel select{font-size:16px!important;width:100%;padding:10px;border:1px solid #aabfba;border-radius:9px;background:#fff;color:#203d36;min-height:48px}
+.reader-settings-panel p{font-size:14px!important;line-height:1.6!important;color:#53655f!important;margin:10px 0 0}
+.reader-settings:focus-within{border-color:#287d68}button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #297763;outline-offset:3px}
+.foot,footer{padding-bottom:75px}.study-controls{margin-bottom:65px}
+@media(max-width:1050px){
+.layout{grid-template-columns:minmax(0,1fr)}
+.sidebar:not(#sidebar){position:static;display:block}.sidebar:not(#sidebar)>.label,.side-progress,.sidebar .problem-nav{display:none}
+.days{grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-bottom:22px}.day-button{display:block;text-align:center;padding:10px 4px}.day-button small{display:none}
+#sidebar .nav-group{display:flex;flex-wrap:wrap;gap:8px;align-items:center}#sidebar .brand{flex:1}#sidebar .progress-mini{flex:1;justify-content:flex-end}#sidebar .nav-actions{flex:1;min-width:145px;margin:0}#sidebar .sidebar-toggle{flex:1;min-width:140px;width:auto;margin:0}.brand small{display:none}
+.problem-index{grid-template-columns:repeat(2,minmax(0,1fr))}.problem-index button{font-size:var(--read-ui)}
+.mobile-jump{display:block}.mobile-jump select{max-width:100%;width:100%;min-height:48px;padding:10px;background:#fff;border:1px solid #c3d0cb;border-radius:10px}
+}
+@media(max-width:700px){
+:root:not([data-reading-size]),:root[data-reading-size="comfortable"]{--read-body:18px;--read-code:17px;--read-small:15px;--read-ui:16px}
+.shell{padding:14px 12px 35px}.card{padding:19px}.statement,.left,.right,.pattern-box,.reasoning,.self-test{padding:19px 17px}
+pre,pre.codeblock,.code-pane{padding:17px}.hero{padding:24px}.hero h1{font-size:32px}
+.hero-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.example-grid,.pattern-grid,.bridge,.map,.template-list{grid-template-columns:minmax(0,1fr)}
+.days{grid-template-columns:repeat(4,minmax(0,1fr))}.day-button span{font-size:var(--read-small)!important}.day-button strong{font-size:20px}
+.problem-row{grid-template-columns:38px minmax(0,1fr);gap:10px}.problem-row .status{grid-column:2;width:100%;max-width:250px}
+.lesson .status{width:100%}.code-actions{flex-wrap:wrap}.code-actions small{flex-basis:100%}.filters button{padding:9px 11px}
+.search{min-width:0;max-width:none}.card-head{flex-wrap:wrap}.schedule{gap:15px}.slot span{overflow-wrap:anywhere}
+.navline{gap:7px;padding:8px 0}.navline a{font-size:15px!important}.navline #lesson-progress{font-size:14px!important}.navline select{width:100%;flex-basis:100%}
+.lesson{scroll-margin-top:140px}.study-controls{flex-wrap:wrap;width:100%;margin-bottom:60px}.study-controls .action{font-size:15px!important}
+.reader-settings{right:12px;bottom:12px}.reader-settings>summary{padding:10px 14px}
+.hero-metrics b{font-size:30px}.no-badge{font-size:18px}.title-row{gap:10px}
+#sidebar .pill{font-size:14px!important;white-space:normal}.problem-index{grid-template-columns:1fr}
+}
+@media print{.reader-settings{display:none!important}.foot,footer{padding-bottom:0}}
+</style><style>
+main p,main li,.task,.quiz,.lesson-head h2,.problem-title,.day-meta,.intro-grid,.reference-body{overflow-wrap:anywhere} .reader-settings[open]{width:292px;max-width:calc(100vw - 24px)}.reader-settings-panel{width:100%} .reader-settings:not([open])>.reader-settings-panel{display:none}
+</style><style id="learning-sequence-styles">
+/* The lesson now follows the learner's dependency order. */
+.study-section{padding:24px 26px;border-top:1px solid #dce5e4;min-width:0}
+.study-section>h4{font-size:calc(var(--read-body,19px) + 3px);color:#245770;line-height:1.55;margin:0 0 18px}
+.study-section p,.study-section li{font-size:var(--read-body,19px);line-height:1.9;color:#304552;overflow-wrap:anywhere}
+.study-section .statement,.study-section .task,.study-section .reasoning,.study-section .self-test,.study-section .quiz{margin:0;border-radius:12px}
+.study-section .statement{padding:0;border:0}.study-section .statement-head{display:none}
+.study-section .trace{margin:0}.study-section .trace li{padding-top:10px;padding-bottom:10px}
+.study-section .one-line,.study-section .key-box{padding:16px;border:0;border-radius:10px;margin:12px 0}
+.study-section .memory-details,.study-section .implementation-details,.study-section .transfer-details{padding:14px;border:1px solid #dce5e4;border-radius:12px;background:#fcfdfb;margin:12px 0}
+.study-section summary{font-size:var(--read-ui,16px);min-height:46px;cursor:pointer;line-height:1.7;padding:8px 0;color:#245770;font-weight:650}
+.study-section .study-code{margin:14px 0;overflow:auto;max-width:100%;white-space:pre;font-size:var(--read-code,17px);line-height:1.85;background:#142d2d;color:#e7f1ed;border-radius:12px;padding:18px}
+.study-section .code-caption{font-size:var(--read-small,16px);color:#51646b}
+.study-shortcuts{display:flex;gap:8px;flex-wrap:wrap;padding:14px 24px;background:#f5f8f4;border-top:1px solid #e1e7e4}
+.study-shortcuts a{display:inline-flex;min-height:44px;align-items:center;padding:8px 12px;border:1px solid #ccd9d3;border-radius:9px;background:#fff;font-size:var(--read-ui,16px);color:#235c57;text-decoration:none}
+.study-shortcuts span{flex-basis:100%;font-size:var(--read-small,16px);color:#51646b}
+.study-section .status-row{margin:16px 0;flex-wrap:wrap}.study-section .focus-mode-bar{border-radius:10px;margin-top:12px}
+.study-section .completion-label{font-weight:650;color:#245770;margin-top:20px}
+.study-section .example-before{white-space:pre-wrap;background:#f0f5f1;color:#304552;padding:16px;border:1px solid #dae5de;border-radius:10px;font-size:var(--read-body,19px);font-family:inherit;overflow-wrap:anywhere}
+.study-section[id]{scroll-margin-top:var(--anchor-offset,140px)}
+.study-copy{display:inline-flex;align-items:center;gap:8px;min-height:46px;font-size:var(--read-ui,16px)}
+.study-section .pattern-box{padding:0;background:transparent;border:0}.study-section .pattern-title{margin-top:12px}
+.study-section .mem-hidden-note{font-size:var(--read-small,16px);color:#51646b}
+.study-section .local-example{margin-top:16px}.study-section .mistake{font-size:var(--read-body,19px)}
+.sequence-notice{padding:18px;border-left:4px solid #609580;background:#eef5ef;font-size:var(--read-body,19px);line-height:1.85;margin:18px 0}
+#sequence-status:empty{display:none}#sequence-status{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#173e35;color:white;padding:12px 20px;border-radius:10px;z-index:220;max-width:90vw;font-size:16px}
+@media(max-width:700px){.study-section{padding:20px 16px}.study-shortcuts{padding:14px 16px}.study-section>h4{font-size:calc(var(--read-body,18px) + 2px)}.study-section .memory-details,.study-section .implementation-details,.study-section .transfer-details{padding:10px}.study-section .study-code{padding:14px}.study-section .status{width:100%}.study-section[id]{scroll-margin-top:var(--anchor-offset,150px)}}
+@media print{.study-shortcuts,.study-copy,#sequence-status{display:none}.study-section{padding:12px 0;break-inside:auto}.study-section>h4{break-after:avoid}}
+</style></head><body><div class="shell"><header class="topline"><div class="brand"><i>H</i>HOT 100 / DAY 7</div><a href="Day7_动态规划.md">Markdown 原稿 ↗</a></header><div class="navline"><a href="Hot100_一周学习计划.html#day7">← 一周总计划</a><span class="muted" id="lesson-progress">已记录 0 / 15</span><select aria-label="切换学习日" id="day-select"><option value="Day1_哈希_双指针_滑动窗口.html">Day 1 · 哈希 / 双指针 / 滑动窗口</option><option value="Day2_数组_矩阵_技巧.html">Day 2 · 数组 / 矩阵 / 技巧</option><option value="Day3_链表.html">Day 3 · 链表</option><option value="Day4_二叉树.html">Day 4 · 二叉树</option><option value="Day5_回溯_二分.html">Day 5 · 回溯 / 二分</option><option value="Day6_图_栈_堆_贪心.html">Day 6 · 图 / 栈 / 堆 / 贪心</option><option selected="" value="Day7_动态规划.html">Day 7 · 动态规划</option></select></div><section class="hero"><div><div class="eyebrow">DAY 07 / Learn · Trace · Code</div><h1>动态规划与混合验收</h1><p>读懂题意，手推状态，把思想一步步写成代码。</p></div><div class="hero-metrics"><div><b>15</b><span>今日题目</span></div><div><b>6</b><span>重点盲写</span></div></div></section><div class="strip"><span>Python 3 完整实现</span><span>每题附手推与本地验证</span><span>本页状态独立保存</span></div><div class="mobile-jump"><label for="problem-select">跳到题目</label><select id="problem-select"><option value="p70">70 · 爬楼梯</option><option value="p118">118 · 杨辉三角</option><option value="p198">198 · 打家劫舍</option><option value="p279">279 · 完全平方数</option><option value="p322">322 · 零钱兑换</option><option value="p139">139 · 单词拆分</option><option value="p300">300 · 最长递增子序列</option><option value="p152">152 · 乘积最大子数组</option><option value="p416">416 · 分割等和子集</option><option value="p32">32 · 最长有效括号</option><option value="p62">62 · 不同路径</option><option value="p64">64 · 最小路径和</option><option value="p1143">1143 · 最长公共子序列</option><option value="p5">5 · 最长回文子串</option><option value="p72">72 · 编辑距离</option></select></div><div class="layout"><aside class="sidebar"><p class="label">TODAY / 题目导航</p><nav class="problem-nav"><a href="#p70"><b>70</b><span>爬楼梯</span></a><a href="#p118"><b>118</b><span>杨辉三角</span></a><a href="#p198"><b>198</b><span>打家劫舍</span></a><a href="#p279"><b>279</b><span>完全平方数</span></a><a href="#p322"><b>322</b><span>零钱兑换</span></a><a href="#p139"><b>139</b><span>单词拆分</span></a><a href="#p300"><b>300</b><span>最长递增子序列</span></a><a href="#p152"><b>152</b><span>乘积最大子数组</span></a><a href="#p416"><b>416</b><span>分割等和子集</span></a><a href="#p32"><b>32</b><span>最长有效括号</span></a><a href="#p62"><b>62</b><span>不同路径</span></a><a href="#p64"><b>64</b><span>最小路径和</span></a><a href="#p1143"><b>1143</b><span>最长公共子序列</span></a><a href="#p5"><b>5</b><span>最长回文子串</span></a><a href="#p72"><b>72</b><span>编辑距离</span></a></nav></aside><main class="content"><div class="sequence-notice"><strong>按理解顺序学习：</strong>读懂题意 → 直接做法 → 推导改进 → 定义状态 → 手推 → 完整代码 → 验证 → 记忆模板 → 闭卷自测 → 题型迁移。题型和跨题链接放在最后，初学时无需提前掌握。</div><section class="card" id="route"><h2>今天先把这些知识连起来</h2><div class="intro-grid"><div><h3>四步固定下来</h3><p>先用完整中文定义dp含义，再写转移、初始化、遍历顺序。70按最后一步分类，198按选或不选分类，152同时维护最大和最小结尾。</p></div><div><h3>两种背包不要混</h3><p>322、279允许重复；416每个数仅用一次。物品外循环时，完全背包金额正序，01背包金额倒序。</p></div><div><h3>连续与子序列分开</h3><p>5、32必须连续，300、1143允许跳过；72计算操作代价。名字都含“最长”也不意味着相同转移。</p></div></div><p class="rhythm">约255分钟：昨日复习25 → 模板20 → A题120 → B题50 → 验收25 → 分段休息15。A题先独立尝试，再看解、关掉重写；B题先说清状态并完成手推。</p><div class="table-wrap"><table><thead><tr><th>题目</th><th>今日目标</th><th>复杂度</th></tr></thead><tbody><tr><td><a href="#p70">70 爬楼梯</a></td><td>A · 重点盲写</td><td>时间 O(n)，额外空间 O(1)。</td></tr><tr><td><a href="#p118">118 杨辉三角</a></td><td>B · 套路覆盖</td><td>时间和输出空间 O(r²)，r为行数；除输出外每次构造一行 O(r)。</td></tr><tr><td><a href="#p198">198 打家劫舍</a></td><td>A · 重点盲写</td><td>时间 O(n)，额外空间 O(1)。</td></tr><tr><td><a href="#p279">279 完全平方数</a></td><td>B · 套路覆盖</td><td>时间 O(n√n)，空间 O(n)。</td></tr><tr><td><a href="#p322">322 零钱兑换</a></td><td>A · 重点盲写</td><td>时间 O(硬币种数×amount)，空间 O(amount)。</td></tr><tr><td><a href="#p139">139 单词拆分</a></td><td>B · 套路覆盖</td><td>n为串长：此切片实现最坏 O(n³)，DP O(n)，字典存储另计；哈希查询还需构造并哈希子串。</td></tr><tr><td><a href="#p300">300 最长递增子序列</a></td><td>B · 套路覆盖</td><td>本实现时间 O(n²)，空间 O(n)，符合基础DP思路；进阶需二分优化。</td></tr><tr><td><a href="#p152">152 乘积最大子数组</a></td><td>B · 套路覆盖</td><td>时间 O(n)，额外空间 O(1)。</td></tr><tr><td><a href="#p416">416 分割等和子集</a></td><td>A · 重点盲写</td><td>时间 O(n·target)，空间 O(target)。</td></tr><tr><td><a href="#p32">32 最长有效括号</a></td><td>B · 套路覆盖</td><td>时间 O(n)，空间 O(n)。</td></tr><tr><td><a href="#p62">62 不同路径</a></td><td>B · 套路覆盖</td><td>时间 O(mn)，空间 O(n)。</td></tr><tr><td><a href="#p64">64 最小路径和</a></td><td>B · 套路覆盖</td><td>时间 O(mn)，空间 O(n)，不修改原网格。</td></tr><tr><td><a href="#p1143">1143 最长公共子序列</a></td><td>A · 重点盲写</td><td>时间 O(mn)，空间 O(mn)，可滚动优化至 O(min(m,n))。</td></tr><tr><td><a href="#p5">5 最长回文子串</a></td><td>B · 套路覆盖</td><td>时间 O(n²)，空间 O(n²)；中心扩展可保持 O(n²) 时间、O(1)辅助空间。</td></tr><tr><td><a href="#p72">72 编辑距离</a></td><td>A · 重点盲写</td><td>时间 O(mn)，空间 O(mn)；可滚动优化，但先理解三种转移的语义。</td></tr></tbody></table></div></section><section class="card"><h3>每题按同一条路线学习</h3><p>读懂题意 → 直接做法 → 推导与状态 → 手推 → 完整代码 → 验证 → 记忆模板 → 自测 → 迁移。代码统一使用 Python 3。</p><p class="code-note">题面是便于学习的概述，不是官网逐字原文。每题附官方原题入口，实际提交前核对完整约束。完整代码附本地构造与断言，可复制到 Python 文件直接运行；提交力扣时只保留要求的类，节点类型由平台提供。树递归版在很深的退化树上可能遇到 Python 递归深度限制，应改为显式栈或按平台限制处理。</p><label class="checkline"><input id="only-core" type="checkbox"/>先只看 6 道 A 类重点题</label></section><article class="card lesson" data-core="true" data-id="70" id="p70"><header class="lesson-head"><span class="no">70</span><h2>爬楼梯</h2><span class="badge">A · 重点盲写</span></header><nav aria-label="本题学习与复习入口" class="study-shortcuts"><span>第一次学：按 01 → 11 顺序阅读；已经学过：直接跳到需要的部分。</span><a data-study-jump="" href="#p70-step7">完整代码</a><a data-study-jump="" href="#p70-step9">记忆模板</a><a data-study-jump="" href="#p70-step10">闭卷自测</a><a data-study-jump="" href="#p70-step11">题型迁移</a></nav><div class="study-section" data-study-step="1" id="p70-step1"><h4>01 / 题目、约束与示例</h4><div class="task"><strong>题意与关键约束 · 学习版</strong><p>每次可以爬1或2级台阶，求到达第n级的不同走法数。</p><small><a href="https://leetcode.cn/problems/climbing-stairs/" rel="noopener noreferrer" target="_blank">阅读官方完整原题 ↗</a></small></div><div class="example-before">输入：4
+期望结果：5</div></div><div class="study-section" data-study-step="2" id="p70-step2"><h4>02 / 先把题目读明白</h4><p>每次只能走1或2级，求不同走法数，不是最少步数。</p><p>先确认：什么输入是合法的、最后返回或修改什么。暂时不需要猜算法名称。</p></div><div class="study-section" data-study-step="3" id="p70-step3"><h4>03 / 最直接的做法</h4><p>按最后一步递归枚举两种来源会反复计算相同台阶数。记录每级的结果，且只保留相邻两项就能复用。</p></div><div class="study-section" data-study-step="4" id="p70-step4"><h4>04 / 从直接做法推导改进</h4><p>按最后一步分类：从n-1跨1级，或从n-2跨2级，两类不重叠，因此f[n]=f[n-1]+f[n-2]。定义f[0]=1表示什么都不走的一种方式，方便统一初始化。</p></div><div class="study-section" data-study-step="5" id="p70-step5"><h4>05 / 定义状态与更新规则</h4><p>a、b保存前两级走法；到下一级有a+b种；同时更新避免新值污染旧值。</p></div><div class="study-section" data-study-step="6" id="p70-step6"><h4>06 / 手推一个完整例子</h4><p>沿着下面的例子跟踪状态；每一步先自己预测，再看下一步。</p><ol class="trace"><li>f0=1,f1=1</li><li>f2=2</li><li>f3=3</li><li>f4=5。到第4级来自第3级的3种和第2级的2种</li></ol></div><div class="study-section" data-study-step="7" id="p70-step7"><h4>07 / 把思路写成完整代码</h4><ul><li>f[0], f[1]</li></ul><details class="implementation-details" open=""><summary>完整实现 · 点击收起后自己重写</summary><p class="code-caption">先对应上面的状态与更新规则理解代码，再运行验证。代码较长时可以左右滑动。</p><button class="study-copy" data-copy-id="p70-implementation">复制完整代码</button><pre class="study-code" id="p70-implementation"><code>from typing import List, Optional
+from collections import deque, Counter, defaultdict
+import heapq
+import math
+
+
+class Solution:
+    def climbStairs(self, n: int) -&gt; int:
+        a, b = 1, 1  # f[0], f[1]
+        for _ in range(2,n+1):
+            a, b = b, a+b
+        return b
+
+# 以下是本地构造与验证；提交力扣时只保留题目要求的类。
+
+if __name__ == "__main__":
+    assert Solution().climbStairs(4)==5
+    assert Solution().climbStairs(1)==1
+    print("自测通过")</code></pre></details></div><div class="study-section" data-study-step="8" id="p70-step8"><h4>08 / 验证、边界与复杂度</h4><p>检查复杂度：时间 O(n)，额外空间 O(1)。</p><details><summary>核对关键边界与易错点</summary><p>滚动变量更新要同时进行或使用临时变量，不能让第二项读取已经更新的第一项。</p></details><details><summary>展开测试调用与期望结果</summary><pre><code>assert Solution().climbStairs(4)==5
+assert Solution().climbStairs(1)==1</code></pre></details><p>完整代码末尾已有本地断言；运行后显示“自测通过”。提交平台时只保留要求的类。</p></div><div class="study-section" data-study-step="9" id="p70-step9"><h4>09 / 理解后提炼记忆模板</h4><p>只记关键关系：a、b保存前两级走法；到下一级有a+b种；同时更新避免新值污染旧值。</p><details class="memory-details"><summary>理解后展开可背核心</summary><p class="mem-hidden-note">先尝试自己写；这里省略本地测试与部分注释，用于复习，不替代前面的推导。</p><button class="study-copy" data-copy-id="p70-memory">复制可背核心</button><pre class="study-code" id="p70-memory"><code>def climbStairs(self, n: int) -&gt; int:
+    a, b = 1, 1
+    for _ in range(2,n+1):
+        a, b = b, a+b
+    return b</code></pre></details></div><div class="study-section" data-study-step="10" id="p70-step10"><h4>10 / 闭卷自测与学习打标</h4><div class="quiz"><p>这道题维护什么状态？哪一步更新顺序或边界最容易写错？先回答，再展开核对。</p><p class="code-note">通过示例不代表覆盖所有输入。再尝试最小规模、重复值或极端结构；隔天能独立复写再确认掌握。</p></div><p>合上完整实现，独立写出一次并用第08节的用例检查；能解释更新顺序后再打标。</p><p class="completion-label">记录本次完成方式</p><select aria-label="70的学习状态" class="status" data-id="70"><option value="">待练习</option><option value="covered">已覆盖 · 读过套路</option><option value="green">绿 · 独立完成</option><option value="yellow">黄 · 借助提示</option><option value="red">红 · 需要重练</option></select></div><div class="study-section" data-study-step="11" id="p70-step11"><h4>11 / 学完再看：题型识别与迁移</h4><p>当前题理解并能复写后，再做下面的归纳。第一次学习可以先跳过跨题链接。</p><details class="transfer-details"><summary>展开题型总结与迁移</summary><p>本题方法：线性动态规划。</p><p>识别前先核对约束：每次只能走1或2级，求不同走法数，不是最少步数。</p><p>迁移时要重新检查状态含义、能否重复选择、连续性或有序性，不能只因为题名相似就照搬。</p><p class="jump-link">知识迁移：<a href="Day7_动态规划.html#p198">对照 Day 7 · 第 198 题 →</a></p></details></div></article><article class="card lesson" data-core="false" data-id="118" id="p118"><header class="lesson-head"><span class="no">118</span><h2>杨辉三角</h2><span class="badge b">B · 套路覆盖</span></header><nav aria-label="本题学习与复习入口" class="study-shortcuts"><span>第一次学：按 01 → 11 顺序阅读；已经学过：直接跳到需要的部分。</span><a data-study-jump="" href="#p118-step7">完整代码</a><a data-study-jump="" href="#p118-step9">记忆模板</a><a data-study-jump="" href="#p118-step10">闭卷自测</a><a data-study-jump="" href="#p118-step11">题型迁移</a></nav><div class="study-section" data-study-step="1" id="p118-step1"><h4>01 / 题目、约束与示例</h4><div class="task"><strong>题意与关键约束 · 学习版</strong><p>返回杨辉三角前numRows行，边缘元素为1，内部为上一行相邻两数之和。</p><small><a href="https://leetcode.cn/problems/pascals-triangle/" rel="noopener noreferrer" target="_blank">阅读官方完整原题 ↗</a></small></div><div class="example-before">输入：4
+期望结果：[[1], [1, 1], [1, 2, 1], [1, 3, 3, 1]]</div></div><div class="study-section" data-study-step="2" id="p118-step2"><h4>02 / 先把题目读明白</h4><p>返回每一行的全部数字，每行长度递增，边缘恒为1。</p><p>先确认：什么输入是合法的、最后返回或修改什么。暂时不需要猜算法名称。</p></div><div class="study-section" data-study-step="3" id="p118-step3"><h4>03 / 最直接的做法</h4><p>根据定义逐个计算即可，无需复杂搜索；关键是上一行已经给出下一行所需的全部局部信息。</p></div><div class="study-section" data-study-step="4" id="p118-step4"><h4>04 / 从直接做法推导改进</h4><p>当前行只依赖上一行。先把整行初始化为1，内部位置j写成上一行j-1和j之和。每行必须创建独立列表，避免共享引用。</p></div><div class="study-section" data-study-step="5" id="p118-step5"><h4>05 / 定义状态与更新规则</h4><p>ans保存完成的行；row独立创建并初始化为1；内部row[j]=上一行j-1与j两项之和。</p></div><div class="study-section" data-study-step="6" id="p118-step6"><h4>06 / 手推一个完整例子</h4><p>沿着下面的例子跟踪状态；每一步先自己预测，再看下一步。</p><ol class="trace"><li>第1行[1]</li><li>第2行[1,1]</li><li>第3行中间1+1=2，得[1,2,1]</li><li>第4行为[1,3,3,1]</li></ol></div><div class="study-section" data-study-step="7" id="p118-step7"><h4>07 / 把思路写成完整代码</h4><p>先对照上面的状态定义找到初始化语句，再看循环或递归如何缩小问题，最后确认返回值对应题目要求。完整代码与核心版采用同一算法。</p><details class="implementation-details" open=""><summary>完整实现 · 点击收起后自己重写</summary><p class="code-caption">先对应上面的状态与更新规则理解代码，再运行验证。代码较长时可以左右滑动。</p><button class="study-copy" data-copy-id="p118-implementation">复制完整代码</button><pre class="study-code" id="p118-implementation"><code>from typing import List, Optional
+from collections import deque, Counter, defaultdict
+import heapq
+import math
+
+
+class Solution:
+    def generate(self, numRows: int) -&gt; List[List[int]]:
+        ans = []
+        for i in range(numRows):
+            row = [1]*(i+1)
+            for j in range(1,i):
+                row[j] = ans[-1][j-1]+ans[-1][j]
+            ans.append(row)
+        return ans
+
+# 以下是本地构造与验证；提交力扣时只保留题目要求的类。
+
+if __name__ == "__main__":
+    assert Solution().generate(4)==[[1],[1,1],[1,2,1],[1,3,3,1]]
+    print("自测通过")</code></pre></details></div><div class="study-section" data-study-step="8" id="p118-step8"><h4>08 / 验证、边界与复杂度</h4><p>检查复杂度：时间和输出空间 O(r²)，r为行数；除输出外每次构造一行 O(r)。</p><details><summary>核对关键边界与易错点</summary><p>不能用[[1]*r]*r 创建二维数组，那会让多行引用同一个列表。</p></details><details><summary>展开测试调用与期望结果</summary><pre><code>assert Solution().generate(4)==[[1],[1,1],[1,2,1],[1,3,3,1]]</code></pre></details><p>完整代码末尾已有本地断言；运行后显示“自测通过”。提交平台时只保留要求的类。</p></div><div class="study-section" data-study-step="9" id="p118-step9"><h4>09 / 理解后提炼记忆模板</h4><p>只记关键关系：ans保存完成的行；row独立创建并初始化为1；内部row[j]=上一行j-1与j两项之和。</p><details class="memory-details"><summary>理解后展开可背核心</summary><p class="mem-hidden-note">先尝试自己写；这里省略本地测试与部分注释，用于复习，不替代前面的推导。</p><button class="study-copy" data-copy-id="p118-memory">复制可背核心</button><pre class="study-code" id="p118-memory"><code>def generate(self, numRows: int) -&gt; List[List[int]]:
+    ans = []
+    for i in range(numRows):
+        row = [1]*(i+1)
+        for j in range(1,i):
+            row[j] = ans[-1][j-1]+ans[-1][j]
+        ans.append(row)
+    return ans</code></pre></details></div><div class="study-section" data-study-step="10" id="p118-step10"><h4>10 / 闭卷自测与学习打标</h4><div class="quiz"><p>这道题维护什么状态？哪一步更新顺序或边界最容易写错？先回答，再展开核对。</p><p class="code-note">通过示例不代表覆盖所有输入。再尝试最小规模、重复值或极端结构；隔天能独立复写再确认掌握。</p></div><p>合上完整实现，独立写出一次并用第08节的用例检查；能解释更新顺序后再打标。</p><p class="completion-label">记录本次完成方式</p><select aria-label="118的学习状态" class="status" data-id="118"><option value="">待练习</option><option value="covered">已覆盖 · 读过套路</option><option value="green">绿 · 独立完成</option><option value="yellow">黄 · 借助提示</option><option value="red">红 · 需要重练</option></select></div><div class="study-section" data-study-step="11" id="p118-step11"><h4>11 / 学完再看：题型识别与迁移</h4><p>当前题理解并能复写后，再做下面的归纳。第一次学习可以先跳过跨题链接。</p><details class="transfer-details"><summary>展开题型总结与迁移</summary><p>本题方法：局部递推。</p><p>识别前先核对约束：返回每一行的全部数字，每行长度递增，边缘恒为1。</p><p>迁移时要重新检查状态含义、能否重复选择、连续性或有序性，不能只因为题名相似就照搬。</p></details></div></article><article class="card lesson" data-core="true" data-id="198" id="p198"><header class="lesson-head"><span class="no">198</span><h2>打家劫舍</h2><span class="badge">A · 重点盲写</span></header><nav aria-label="本题学习与复习入口" class="study-shortcuts"><span>第一次学：按 01 → 11 顺序阅读；已经学过：直接跳到需要的部分。</span><a data-study-jump="" href="#p198-step7">完整代码</a><a data-study-jump="" href="#p198-step9">记忆模板</a><a data-study-jump="" href="#p198-step10">闭卷自测</a><a data-study-jump="" href="#p198-step11">题型迁移</a></nav><div class="study-section" data-study-step="1" id="p198-step1"><h4>01 / 题目、约束与示例</h4><div class="task"><strong>题意与关键约束 · 学习版</strong><p>房屋金额非负，相邻房屋不能同时选，求最多能获得的总金额。</p><small><a href="https://leetcode.cn/problems/house-robber/" rel="noopener noreferrer" target="_blank">阅读官方完整原题 ↗</a></small></div><div class="example-before">输入：[2, 7, 9, 3, 1]
+期望结果：12</div></div><div class="study-section" data-study-step="2" id="p198-step2"><h4>02 / 先把题目读明白</h4><p>相邻房屋不能同时选择，金额非负；目标是最大总金额。</p><p>先确认：什么输入是合法的、最后返回或修改什么。暂时不需要猜算法名称。</p></div><div class="study-section" data-study-step="3" id="p198-step3"><h4>03 / 最直接的做法</h4><p>枚举每间选或不选会产生指数级分支。相同前缀的最优值会被反复用到，记录它们便能合并重复计算。</p></div><div class="study-section" data-study-step="4" id="p198-step4"><h4>04 / 从直接做法推导改进</h4><p>处理当前房屋只有选与不选两种情况。选它就加上前两间的最优值，不选就沿用前一间最优值。prev2与prev1代表这两个旧状态，滚动更新时不能混入新值。</p></div><div class="study-section" data-study-step="5" id="p198-step5"><h4>05 / 定义状态与更新规则</h4><p>prev1是前一间处理后的最优值，prev2是前两间的最优值；current取不选prev1与选prev2+money的较大者。</p></div><div class="study-section" data-study-step="6" id="p198-step6"><h4>06 / 手推一个完整例子</h4><p>沿着下面的例子跟踪状态；每一步先自己预测，再看下一步。</p><ol class="trace"><li>[2,7,9,3,1]</li><li>逐间最优为2、7、11、11、12</li><li>最后选择2+9+1=12</li></ol></div><div class="study-section" data-study-step="7" id="p198-step7"><h4>07 / 把思路写成完整代码</h4><p>先对照上面的状态定义找到初始化语句，再看循环或递归如何缩小问题，最后确认返回值对应题目要求。完整代码与核心版采用同一算法。</p><details class="implementation-details" open=""><summary>完整实现 · 点击收起后自己重写</summary><p class="code-caption">先对应上面的状态与更新规则理解代码，再运行验证。代码较长时可以左右滑动。</p><button class="study-copy" data-copy-id="p198-implementation">复制完整代码</button><pre class="study-code" id="p198-implementation"><code>from typing import List, Optional
+from collections import deque, Counter, defaultdict
+import heapq
+import math
+
+
+class Solution:
+    def rob(self, nums: List[int]) -&gt; int:
+        prev2 = prev1 = 0
+        for money in nums:
+            current = max(prev1,prev2+money)
+            prev2, prev1 = prev1,current
+        return prev1
+
+# 以下是本地构造与验证；提交力扣时只保留题目要求的类。
+
+if __name__ == "__main__":
+    assert Solution().rob([2,7,9,3,1])==12
+    assert Solution().rob([2,1,1,2])==4
+    print("自测通过")</code></pre></details></div><div class="study-section" data-study-step="8" id="p198-step8"><h4>08 / 验证、边界与复杂度</h4><p>检查复杂度：时间 O(n)，额外空间 O(1)。</p><details><summary>核对关键边界与易错点</summary><p>不是每一步选相邻两间较大者；局部金额大可能阻挡后面的更优组合。</p></details><details><summary>展开测试调用与期望结果</summary><pre><code>assert Solution().rob([2,7,9,3,1])==12
+assert Solution().rob([2,1,1,2])==4</code></pre></details><p>完整代码末尾已有本地断言；运行后显示“自测通过”。提交平台时只保留要求的类。</p></div><div class="study-section" data-study-step="9" id="p198-step9"><h4>09 / 理解后提炼记忆模板</h4><p>只记关键关系：prev1是前一间处理后的最优值，prev2是前两间的最优值；current取不选prev1与选prev2+money的较大者。</p><details class="memory-details"><summary>理解后展开可背核心</summary><p class="mem-hidden-note">先尝试自己写；这里省略本地测试与部分注释，用于复习，不替代前面的推导。</p><button class="study-copy" data-copy-id="p198-memory">复制可背核心</button><pre class="study-code" id="p198-memory"><code>def rob(self, nums: List[int]) -&gt; int:
+    prev2 = prev1 = 0
+    for money in nums:
+        current = max(prev1,prev2+money)
+        prev2, prev1 = prev1,current
+    return prev1</code></pre></details></div><div class="study-section" data-study-step="10" id="p198-step10"><h4>10 / 闭卷自测与学习打标</h4><div class="quiz"><p>这道题维护什么状态？哪一步更新顺序或边界最容易写错？先回答，再展开核对。</p><p class="code-note">通过示例不代表覆盖所有输入。再尝试最小规模、重复值或极端结构；隔天能独立复写再确认掌握。</p></div><p>合上完整实现，独立写出一次并用第08节的用例检查；能解释更新顺序后再打标。</p><p class="completion-label">记录本次完成方式</p><select aria-label="198的学习状态" class="status" data-id="198"><option value="">待练习</option><option value="covered">已覆盖 · 读过套路</option><option value="green">绿 · 独立完成</option><option value="yellow">黄 · 借助提示</option><option value="red">红 · 需要重练</option></select></div><div class="study-section" data-study-step="11" id="p198-step11"><h4>11 / 学完再看：题型识别与迁移</h4><p>当前题理解并能复写后，再做下面的归纳。第一次学习可以先跳过跨题链接。</p><details class="transfer-details"><summary>展开题型总结与迁移</summary><p>本题方法：线性动态规划。</p><p>识别前先核对约束：相邻房屋不能同时选择，金额非负；目标是最大总金额。</p><p>迁移时要重新检查状态含义、能否重复选择、连续性或有序性，不能只因为题名相似就照搬。</p></details></div></article><article class="card lesson" data-core="false" data-id="279" id="p279"><header class="lesson-head"><span class="no">279</span><h2>完全平方数</h2><span class="badge b">B · 套路覆盖</span></header><nav aria-label="本题学习与复习入口" class="study-shortcuts"><span>第一次学：按 01 → 11 顺序阅读；已经学过：直接跳到需要的部分。</span><a data-study-jump="" href="#p279-step7">完整代码</a><a data-study-jump="" href="#p279-step9">记忆模板</a><a data-study-jump="" href="#p279-step10">闭卷自测</a><a data-study-jump="" href="#p279-step11">题型迁移</a></nav><div class="study-section" data-study-step="1" id="p279-step1"><h4>01 / 题目、约束与示例</h4><div class="task"><strong>题意与关键约束 · 学习版</strong><p>用若干完全平方数相加得到n，返回最少项数，平方数可重复使用。</p><small><a href="https://leetcode.cn/problems/perfect-squares/" rel="noopener noreferrer" target="_blank">阅读官方完整原题 ↗</a></small></div><div class="example-before">输入：12
+期望结果：3</div></div><div class="study-section" data-study-step="2" id="p279-step2"><h4>02 / 先把题目读明白</h4><p>完全平方数可以重复用，目标是凑出n的最少项数。</p><p>先确认：什么输入是合法的、最后返回或修改什么。暂时不需要猜算法名称。</p></div><div class="study-section" data-study-step="3" id="p279-step3"><h4>03 / 最直接的做法</h4><p>枚举所有平方数组合会重复遇到相同剩余金额。按“最后加哪个平方数”分类，保存每个较小金额的最少项数。</p></div><div class="study-section" data-study-step="4" id="p279-step4"><h4>04 / 从直接做法推导改进</h4><p>这就是面额为1、4、9等的零钱兑换。dp[x]表示凑出x的最少个数；枚举最后加上的平方s，候选是dp[x-s]+1。金额从小到大，所有前驱已经算好。</p></div><div class="study-section" data-study-step="5" id="p279-step5"><h4>05 / 定义状态与更新规则</h4><p>dp[x]是凑出x的最少项数，dp[0]=0；枚举square&lt;=x，用dp[x-square]+1改善dp[x]。</p></div><div class="study-section" data-study-step="6" id="p279-step6"><h4>06 / 手推一个完整例子</h4><p>沿着下面的例子跟踪状态；每一步先自己预测，再看下一步。</p><ol class="trace"><li>n=12</li><li>平方可用1,4,9</li><li>dp4=1、dp8=2</li><li>dp12可由dp8+4得到3，对应4+4+4</li><li>9+1+1+1需要4项</li></ol></div><div class="study-section" data-study-step="7" id="p279-step7"><h4>07 / 把思路写成完整代码</h4><p>先对照上面的状态定义找到初始化语句，再看循环或递归如何缩小问题，最后确认返回值对应题目要求。完整代码与核心版采用同一算法。</p><details class="implementation-details" open=""><summary>完整实现 · 点击收起后自己重写</summary><p class="code-caption">先对应上面的状态与更新规则理解代码，再运行验证。代码较长时可以左右滑动。</p><button class="study-copy" data-copy-id="p279-implementation">复制完整代码</button><pre class="study-code" id="p279-implementation"><code>from typing import List, Optional
+from collections import deque, Counter, defaultdict
+import heapq
+import math
+
+
+class Solution:
+    def numSquares(self, n: int) -&gt; int:
+        squares = [i*i for i in range(1,math.isqrt(n)+1)]
+        dp = [0]+[n+1]*n
+        for amount in range(1,n+1):
+            for square in squares:
+                if square&gt;amount: break
+                dp[amount] = min(dp[amount],dp[amount-square]+1)
+        return dp[n]
+
+# 以下是本地构造与验证；提交力扣时只保留题目要求的类。
+
+if __name__ == "__main__":
+    assert Solution().numSquares(12)==3
+    assert Solution().numSquares(13)==2
+    print("自测通过")</code></pre></details></div><div class="study-section" data-study-step="8" id="p279-step8"><h4>08 / 验证、边界与复杂度</h4><p>检查复杂度：时间 O(n√n)，空间 O(n)。</p><details><summary>核对关键边界与易错点</summary><p>不要贪心总选最大平方，12选9会比三个4更差。</p></details><details><summary>展开测试调用与期望结果</summary><pre><code>assert Solution().numSquares(12)==3
+assert Solution().numSquares(13)==2</code></pre></details><p>完整代码末尾已有本地断言；运行后显示“自测通过”。提交平台时只保留要求的类。</p></div><div class="study-section" data-study-step="9" id="p279-step9"><h4>09 / 理解后提炼记忆模板</h4><p>只记关键关系：dp[x]是凑出x的最少项数，dp[0]=0；枚举square&lt;=x，用dp[x-square]+1改善dp[x]。</p><details class="memory-details"><summary>理解后展开可背核心</summary><p class="mem-hidden-note">先尝试自己写；这里省略本地测试与部分注释，用于复习，不替代前面的推导。</p><button class="study-copy" data-copy-id="p279-memory">复制可背核心</button><pre class="study-code" id="p279-memory"><code>def numSquares(self, n: int) -&gt; int:
+    squares = [i*i for i in range(1,math.isqrt(n)+1)]
+    dp = [0]+[n+1]*n
+    for amount in range(1,n+1):
+        for square in squares:
+            if square&gt;amount: break
+            dp[amount] = min(dp[amount],dp[amount-square]+1)
+    return dp[n]</code></pre></details></div><div class="study-section" data-study-step="10" id="p279-step10"><h4>10 / 闭卷自测与学习打标</h4><div class="quiz"><p>这道题维护什么状态？哪一步更新顺序或边界最容易写错？先回答，再展开核对。</p><p class="code-note">通过示例不代表覆盖所有输入。再尝试最小规模、重复值或极端结构；隔天能独立复写再确认掌握。</p></div><p>合上完整实现，独立写出一次并用第08节的用例检查；能解释更新顺序后再打标。</p><p class="completion-label">记录本次完成方式</p><select aria-label="279的学习状态" class="status" data-id="279"><option value="">待练习</option><option value="covered">已覆盖 · 读过套路</option><option value="green">绿 · 独立完成</option><option value="yellow">黄 · 借助提示</option><option value="red">红 · 需要重练</option></select></div><div class="study-section" data-study-step="11" id="p279-step11"><h4>11 / 学完再看：题型识别与迁移</h4><p>当前题理解并能复写后，再做下面的归纳。第一次学习可以先跳过跨题链接。</p><details class="transfer-details"><summary>展开题型总结与迁移</summary><p>本题方法：完全背包。</p><p>识别前先核对约束：完全平方数可以重复用，目标是凑出n的最少项数。</p><p>迁移时要重新检查状态含义、能否重复选择、连续性或有序性，不能只因为题名相似就照搬。</p></details></div></article><article class="card lesson" data-core="true" data-id="322" id="p322"><header class="lesson-head"><span class="no">322</span><h2>零钱兑换</h2><span class="badge">A · 重点盲写</span></header><nav aria-label="本题学习与复习入口" class="study-shortcuts"><span>第一次学：按 01 → 11 顺序阅读；已经学过：直接跳到需要的部分。</span><a data-study-jump="" href="#p322-step7">完整代码</a><a data-study-jump="" href="#p322-step9">记忆模板</a><a data-study-jump="" href="#p322-step10">闭卷自测</a><a data-study-jump="" href="#p322-step11">题型迁移</a></nav><div class="study-section" data-study-step="1" id="p322-step1"><h4>01 / 题目、约束与示例</h4><div class="task"><strong>题意与关键约束 · 学习版</strong><p>硬币面额为正整数，每种无限个，凑出amount所需最少硬币数；无解返回-1。</p><small><a href="https://leetcode.cn/problems/coin-change/" rel="noopener noreferrer" target="_blank">阅读官方完整原题 ↗</a></small></div><div class="example-before">输入：[1, 3, 4]；6
+期望结果：2</div></div><div class="study-section" data-study-step="2" id="p322-step2"><h4>02 / 先把题目读明白</h4><p>每种正面额无限个，求最少硬币数，不可达返回-1；金额0需要0枚。</p><p>先确认：什么输入是合法的、最后返回或修改什么。暂时不需要猜算法名称。</p></div><div class="study-section" data-study-step="3" id="p322-step3"><h4>03 / 最直接的做法</h4><p>递归枚举最后使用的硬币会反复计算相同剩余金额。用金额状态表复用结果，避免重复搜索。</p></div><div class="study-section" data-study-step="4" id="p322-step4"><h4>04 / 从直接做法推导改进</h4><p>dp[x]表示恰好凑出金额x的最少数量，dp[0]=0，其他初始不可达。按硬币外循环时金额正序，允许当前硬币在同一轮被多次使用。和416只用一次的倒序形成对照。</p></div><div class="study-section" data-study-step="5" id="p322-step5"><h4>05 / 定义状态与更新规则</h4><p>dp[x]是恰好凑x的最少数量；初始除0外不可达；硬币外循环时金额正序，允许复用本轮硬币。</p></div><div class="study-section" data-study-step="6" id="p322-step6"><h4>06 / 手推一个完整例子</h4><p>沿着下面的例子跟踪状态；每一步先自己预测，再看下一步。</p><ol class="trace"><li>coins=[1,3,4],amount=6</li><li>用1后dp6=6</li><li>加入3，dp3=1、dp6=2</li><li>加入4，dp6仍2，对应3+3</li></ol></div><div class="study-section" data-study-step="7" id="p322-step7"><h4>07 / 把思路写成完整代码</h4><ul><li>正序允许复用当前硬币</li></ul><details class="implementation-details" open=""><summary>完整实现 · 点击收起后自己重写</summary><p class="code-caption">先对应上面的状态与更新规则理解代码，再运行验证。代码较长时可以左右滑动。</p><button class="study-copy" data-copy-id="p322-implementation">复制完整代码</button><pre class="study-code" id="p322-implementation"><code>from typing import List, Optional
+from collections import deque, Counter, defaultdict
+import heapq
+import math
+
+
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -&gt; int:
+        dp = [0]+[amount+1]*amount
+        for coin in coins:
+            for x in range(coin,amount+1):  # 正序允许复用当前硬币
+                dp[x] = min(dp[x],dp[x-coin]+1)
+        return dp[amount] if dp[amount]&lt;=amount else -1
+
+# 以下是本地构造与验证；提交力扣时只保留题目要求的类。
+
+if __name__ == "__main__":
+    assert Solution().coinChange([1,3,4],6)==2
+    assert Solution().coinChange([2],3)==-1
+    assert Solution().coinChange([2],0)==0
+    print("自测通过")</code></pre></details></div><div class="study-section" data-study-step="8" id="p322-step8"><h4>08 / 验证、边界与复杂度</h4><p>检查复杂度：时间 O(硬币种数×amount)，空间 O(amount)。</p><details><summary>核对关键边界与易错点</summary><p>dp初始为0会把不可达金额当作不花硬币可达；必须用足够大的哨兵。</p></details><details><summary>展开测试调用与期望结果</summary><pre><code>assert Solution().coinChange([1,3,4],6)==2
+assert Solution().coinChange([2],3)==-1
+assert Solution().coinChange([2],0)==0</code></pre></details><p>完整代码末尾已有本地断言；运行后显示“自测通过”。提交平台时只保留要求的类。</p></div><div class="study-section" data-study-step="9" id="p322-step9"><h4>09 / 理解后提炼记忆模板</h4><p>只记关键关系：dp[x]是恰好凑x的最少数量；初始除0外不可达；硬币外循环时金额正序，允许复用本轮硬币。</p><details class="memory-details"><summary>理解后展开可背核心</summary><p class="mem-hidden-note">先尝试自己写；这里省略本地测试与部分注释，用于复习，不替代前面的推导。</p><button class="study-copy" data-copy-id="p322-memory">复制可背核心</button><pre class="study-code" id="p322-memory"><code>def coinChange(self, coins: List[int], amount: int) -&gt; int:
+    dp = [0]+[amount+1]*amount
+    for coin in coins:
+        for x in range(coin,amount+1):
+            dp[x] = min(dp[x],dp[x-coin]+1)
+    return dp[amount] if dp[amount]&lt;=amount else -1</code></pre></details></div><div class="study-section" data-study-step="10" id="p322-step10"><h4>10 / 闭卷自测与学习打标</h4><div class="quiz"><p>这道题维护什么状态？哪一步更新顺序或边界最容易写错？先回答，再展开核对。</p><p class="code-note">通过示例不代表覆盖所有输入。再尝试最小规模、重复值或极端结构；隔天能独立复写再确认掌握。</p></div><p>合上完整实现，独立写出一次并用第08节的用例检查；能解释更新顺序后再打标。</p><p class="completion-label">记录本次完成方式</p><select aria-label="322的学习状态" class="status" data-id="322"><option value="">待练习</option><option value="covered">已覆盖 · 读过套路</option><option value="green">绿 · 独立完成</option><option value="yellow">黄 · 借助提示</option><option value="red">红 · 需要重练</option></select></div><div class="study-section" data-study-step="11" id="p322-step11"><h4>11 / 学完再看：题型识别与迁移</h4><p>当前题理解并能复写后，再做下面的归纳。第一次学习可以先跳过跨题链接。</p><details class="transfer-details"><summary>展开题型总结与迁移</summary><p>本题方法：完全背包。</p><p>识别前先核对约束：每种正面额无限个，求最少硬币数，不可达返回-1；金额0需要0枚。</p><p>迁移时要重新检查状态含义、能否重复选择、连续性或有序性，不能只因为题名相似就照搬。</p><p class="jump-link">知识迁移：<a href="Day7_动态规划.html#p416">对照 Day 7 · 第 416 题 →</a></p></details></div></article><article class="card lesson" data-core="false" data-id="139" id="p139"><header class="lesson-head"><span class="no">139</span><h2>单词拆分</h2><span class="badge b">B · 套路覆盖</span></header><nav aria-label="本题学习与复习入口" class="study-shortcuts"><span>第一次学：按 01 → 11 顺序阅读；已经学过：直接跳到需要的部分。</span><a data-study-jump="" href="#p139-step7">完整代码</a><a data-study-jump="" href="#p139-step9">记忆模板</a><a data-study-jump="" href="#p139-step10">闭卷自测</a><a data-study-jump="" href="#p139-step11">题型迁移</a></nav><div class="study-section" data-study-step="1" id="p139-step1"><h4>01 / 题目、约束与示例</h4><div class="task"><strong>题意与关键约束 · 学习版</strong><p>判断字符串能否分割为字典中单词，单词可重复使用。</p><small><a href="https://leetcode.cn/problems/word-break/" rel="noopener noreferrer" target="_blank">阅读官方完整原题 ↗</a></small></div><div class="example-before">输入：'leetcode'；['leet', 'code']
+期望结果：True（是）</div></div><div class="study-section" data-study-step="2" id="p139-step2"><h4>02 / 先把题目读明白</h4><p>字典单词可以重复使用，但切分必须无缝覆盖原字符串。</p><p>先确认：什么输入是合法的、最后返回或修改什么。暂时不需要猜算法名称。</p></div><div class="study-section" data-study-step="3" id="p139-step3"><h4>03 / 最直接的做法</h4><p>递归尝试下一段字典词会反复处理相同后缀。把能否拆完一个前缀作为状态，每个前缀只求一次。</p></div><div class="study-section" data-study-step="4" id="p139-step4"><h4>04 / 从直接做法推导改进</h4><p>dp[i]表示前i个字符可以被完整拆分，dp[0]=True。枚举最后一段s[j:i]，只要前j个可拆且这一段在字典，就能得到dp[i]。不是在原串里随便找字典词，必须无缝覆盖。</p></div><div class="study-section" data-study-step="5" id="p139-step5"><h4>05 / 定义状态与更新规则</h4><p>dp[i]表示前i个字符可拆，dp[0]=True；枚举j，dp[j]为真且s[j:i]是词时令dp[i]为真。</p></div><div class="study-section" data-study-step="6" id="p139-step6"><h4>06 / 手推一个完整例子</h4><p>沿着下面的例子跟踪状态；每一步先自己预测，再看下一步。</p><ol class="trace"><li>leetcode，字典leet/code</li><li>dp0为真</li><li>i4时s0:4=leet使dp4真</li><li>i8时dp4真且s4:8=code，故dp8真</li></ol></div><div class="study-section" data-study-step="7" id="p139-step7"><h4>07 / 把思路写成完整代码</h4><p>先对照上面的状态定义找到初始化语句，再看循环或递归如何缩小问题，最后确认返回值对应题目要求。完整代码与核心版采用同一算法。</p><details class="implementation-details" open=""><summary>完整实现 · 点击收起后自己重写</summary><p class="code-caption">先对应上面的状态与更新规则理解代码，再运行验证。代码较长时可以左右滑动。</p><button class="study-copy" data-copy-id="p139-implementation">复制完整代码</button><pre class="study-code" id="p139-implementation"><code>from typing import List, Optional
+from collections import deque, Counter, defaultdict
+import heapq
+import math
+
+
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -&gt; bool:
+        words = set(wordDict)
+        dp = [True]+[False]*len(s)
+        for i in range(1,len(s)+1):
+            for j in range(i):
+                if dp[j] and s[j:i] in words:
+                    dp[i] = True
+                    break
+        return dp[-1]
+
+# 以下是本地构造与验证；提交力扣时只保留题目要求的类。
+
+if __name__ == "__main__":
+    assert Solution().wordBreak("leetcode",["leet","code"])
+    assert not Solution().wordBreak("catsandog",["cats","dog","sand","and","cat"])
+    print("自测通过")</code></pre></details></div><div class="study-section" data-study-step="8" id="p139-step8"><h4>08 / 验证、边界与复杂度</h4><p>检查复杂度：n为串长：此切片实现最坏 O(n³)，DP O(n)，字典存储另计；哈希查询还需构造并哈希子串。</p><details><summary>核对关键边界与易错点</summary><p>不能把双循环直接写成 O(n²) 而忽略Python切片的字符复制成本。</p></details><details><summary>展开测试调用与期望结果</summary><pre><code>assert Solution().wordBreak("leetcode",["leet","code"])
+assert not Solution().wordBreak("catsandog",["cats","dog","sand","and","cat"])</code></pre></details><p>完整代码末尾已有本地断言；运行后显示“自测通过”。提交平台时只保留要求的类。</p></div><div class="study-section" data-study-step="9" id="p139-step9"><h4>09 / 理解后提炼记忆模板</h4><p>只记关键关系：dp[i]表示前i个字符可拆，dp[0]=True；枚举j，dp[j]为真且s[j:i]是词时令dp[i]为真。</p><details class="memory-details"><summary>理解后展开可背核心</summary><p class="mem-hidden-note">先尝试自己写；这里省略本地测试与部分注释，用于复习，不替代前面的推导。</p><button class="study-copy" data-copy-id="p139-memory">复制可背核心</button><pre class="study-code" id="p139-memory"><code>def wordBreak(self, s: str, wordDict: List[str]) -&gt; bool:
+    words = set(wordDict)
+    dp = [True]+[False]*len(s)
+    for i in range(1,len(s)+1):
+        for j in range(i):
+            if dp[j] and s[j:i] in words:
+                dp[i] = True
+                break
+    return dp[-1]</code></pre></details></div><div class="study-section" data-study-step="10" id="p139-step10"><h4>10 / 闭卷自测与学习打标</h4><div class="quiz"><p>这道题维护什么状态？哪一步更新顺序或边界最容易写错？先回答，再展开核对。</p><p class="code-note">通过示例不代表覆盖所有输入。再尝试最小规模、重复值或极端结构；隔天能独立复写再确认掌握。</p></div><p>合上完整实现，独立写出一次并用第08节的用例检查；能解释更新顺序后再打标。</p><p class="completion-label">记录本次完成方式</p><select aria-label="139的学习状态" class="status" data-id="139"><option value="">待练习</option><option value="covered">已覆盖 · 读过套路</option><option value="green">绿 · 独立完成</option><option value="yellow">黄 · 借助提示</option><option value="red">红 · 需要重练</option></select></div><div class="study-section" data-study-step="11" id="p139-step11"><h4>11 / 学完再看：题型识别与迁移</h4><p>当前题理解并能复写后，再做下面的归纳。第一次学习可以先跳过跨题链接。</p><details class="transfer-details"><summary>展开题型总结与迁移</summary><p>本题方法：前缀可达性。</p><p>识别前先核对约束：字典单词可以重复使用，但切分必须无缝覆盖原字符串。</p><p>迁移时要重新检查状态含义、能否重复选择、连续性或有序性，不能只因为题名相似就照搬。</p><p class="jump-link">知识迁移：<a href="Day5_回溯_二分.html#p131">对照 Day 5 · 第 131 题 →</a></p></details></div></article><article class="card lesson" data-core="false" data-id="300" id="p300"><header class="lesson-head"><span class="no">300</span><h2>最长递增子序列</h2><span class="badge b">B · 套路覆盖</span></header><nav aria-label="本题学习与复习入口" class="study-shortcuts"><span>第一次学：按 01 → 11 顺序阅读；已经学过：直接跳到需要的部分。</span><a data-study-jump="" href="#p300-step7">完整代码</a><a data-study-jump="" href="#p300-step9">记忆模板</a><a data-study-jump="" href="#p300-step10">闭卷自测</a><a data-study-jump="" href="#p300-step11">题型迁移</a></nav><div class="study-section" data-study-step="1" id="p300-step1"><h4>01 / 题目、约束与示例</h4><div class="task"><strong>题意与关键约束 · 学习版</strong><p>返回严格递增子序列的最长长度；可以跳过元素，但不能改变相对顺序。</p><small><a href="https://leetcode.cn/problems/longest-increasing-subsequence/" rel="noopener noreferrer" target="_blank">阅读官方完整原题 ↗</a></small></div><div class="example-before">输入：[3, 1, 2, 4]
+期望结果：3</div></div><div class="study-section" data-study-step="2" id="p300-step2"><h4>02 / 先把题目读明白</h4><p>严格递增，可跳过元素但不能改变顺序；不是连续递增子数组。</p><p>先确认：什么输入是合法的、最后返回或修改什么。暂时不需要猜算法名称。</p></div><div class="study-section" data-study-step="3" id="p300-step3"><h4>03 / 最直接的做法</h4><p>枚举所有子序列再检查递增需要指数时间。固定最后一个位置，前驱只需提供以它结尾的最优长度。</p></div><div class="study-section" data-study-step="4" id="p300-step4"><h4>04 / 从直接做法推导改进</h4><p>先用最直观DP：dp[i]为以nums[i]结尾的最长长度。枚举所有j&lt;i且nums[j]&lt;nums[i]，尝试接在其后。答案是所有结尾的最大值。之后可学tails+二分把时间降到 O(n log n)。</p></div><div class="study-section" data-study-step="5" id="p300-step5"><h4>05 / 定义状态与更新规则</h4><p>dp[i]是以nums[i]结尾的LIS长度，初始1；对j&lt;i且nums[j]&lt;nums[i]取dp[j]+1最大值。</p></div><div class="study-section" data-study-step="6" id="p300-step6"><h4>06 / 手推一个完整例子</h4><p>沿着下面的例子跟踪状态；每一步先自己预测，再看下一步。</p><ol class="trace"><li>[3,1,2,4]</li><li>dp起始全1</li><li>1无法接3</li><li>2接1得2</li><li>4接2得3</li><li>答案3，对应1,2,4</li></ol></div><div class="study-section" data-study-step="7" id="p300-step7"><h4>07 / 把思路写成完整代码</h4><p>先对照上面的状态定义找到初始化语句，再看循环或递归如何缩小问题，最后确认返回值对应题目要求。完整代码与核心版采用同一算法。</p><details class="implementation-details" open=""><summary>完整实现 · 点击收起后自己重写</summary><p class="code-caption">先对应上面的状态与更新规则理解代码，再运行验证。代码较长时可以左右滑动。</p><button class="study-copy" data-copy-id="p300-implementation">复制完整代码</button><pre class="study-code" id="p300-implementation"><code>from typing import List, Optional
+from collections import deque, Counter, defaultdict
+import heapq
+import math
+
+
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -&gt; int:
+        dp = [1]*len(nums)
+        for i in range(len(nums)):
+            for j in range(i):
+                if nums[j]&lt;nums[i]:
+                    dp[i] = max(dp[i],dp[j]+1)
+        return max(dp,default=0)
+
+# 以下是本地构造与验证；提交力扣时只保留题目要求的类。
+
+if __name__ == "__main__":
+    assert Solution().lengthOfLIS([3,1,2,4])==3
+    assert Solution().lengthOfLIS([2,2,2])==1
+    print("自测通过")</code></pre></details></div><div class="study-section" data-study-step="8" id="p300-step8"><h4>08 / 验证、边界与复杂度</h4><p>检查复杂度：本实现时间 O(n²)，空间 O(n)，符合基础DP思路；进阶需二分优化。</p><details><summary>核对关键边界与易错点</summary><p>严格递增用&lt;，相等不能延长；子序列不要求连续，区别Day1的128。</p></details><details><summary>展开测试调用与期望结果</summary><pre><code>assert Solution().lengthOfLIS([3,1,2,4])==3
+assert Solution().lengthOfLIS([2,2,2])==1</code></pre></details><p>完整代码末尾已有本地断言；运行后显示“自测通过”。提交平台时只保留要求的类。</p></div><div class="study-section" data-study-step="9" id="p300-step9"><h4>09 / 理解后提炼记忆模板</h4><p>只记关键关系：dp[i]是以nums[i]结尾的LIS长度，初始1；对j&lt;i且nums[j]&lt;nums[i]取dp[j]+1最大值。</p><details class="memory-details"><summary>理解后展开可背核心</summary><p class="mem-hidden-note">先尝试自己写；这里省略本地测试与部分注释，用于复习，不替代前面的推导。</p><button class="study-copy" data-copy-id="p300-memory">复制可背核心</button><pre class="study-code" id="p300-memory"><code>def lengthOfLIS(self, nums: List[int]) -&gt; int:
+    dp = [1]*len(nums)
+    for i in range(len(nums)):
+        for j in range(i):
+            if nums[j]&lt;nums[i]:
+                dp[i] = max(dp[i],dp[j]+1)
+    return max(dp,default=0)</code></pre></details></div><div class="study-section" data-study-step="10" id="p300-step10"><h4>10 / 闭卷自测与学习打标</h4><div class="quiz"><p>这道题维护什么状态？哪一步更新顺序或边界最容易写错？先回答，再展开核对。</p><p class="code-note">通过示例不代表覆盖所有输入。再尝试最小规模、重复值或极端结构；隔天能独立复写再确认掌握。</p></div><p>合上完整实现，独立写出一次并用第08节的用例检查；能解释更新顺序后再打标。</p><p class="completion-label">记录本次完成方式</p><select aria-label="300的学习状态" class="status" data-id="300"><option value="">待练习</option><option value="covered">已覆盖 · 读过套路</option><option value="green">绿 · 独立完成</option><option value="yellow">黄 · 借助提示</option><option value="red">红 · 需要重练</option></select></div><div class="study-section" data-study-step="11" id="p300-step11"><h4>11 / 学完再看：题型识别与迁移</h4><p>当前题理解并能复写后，再做下面的归纳。第一次学习可以先跳过跨题链接。</p><details class="transfer-details"><summary>展开题型总结与迁移</summary><p>本题方法：以当前位置结尾的DP。</p><p>识别前先核对约束：严格递增，可跳过元素但不能改变顺序；不是连续递增子数组。</p><p>迁移时要重新检查状态含义、能否重复选择、连续性或有序性，不能只因为题名相似就照搬。</p><p class="jump-link">知识迁移：<a href="Day1_哈希_双指针_滑动窗口.html#p128">对照 Day 1 · 第 128 题 →</a></p></details></div></article><article class="card lesson" data-core="false" data-id="152" id="p152"><header class="lesson-head"><span class="no">152</span><h2>乘积最大子数组</h2><span class="badge b">B · 套路覆盖</span></header><nav aria-label="本题学习与复习入口" class="study-shortcuts"><span>第一次学：按 01 → 11 顺序阅读；已经学过：直接跳到需要的部分。</span><a data-study-jump="" href="#p152-step7">完整代码</a><a data-study-jump="" href="#p152-step9">记忆模板</a><a data-study-jump="" href="#p152-step10">闭卷自测</a><a data-study-jump="" href="#p152-step11">题型迁移</a></nav><div class="study-section" data-study-step="1" id="p152-step1"><h4>01 / 题目、约束与示例</h4><div class="task"><strong>题意与关键约束 · 学习版</strong><p>求非空连续子数组的最大乘积，元素可为正、负、零。</p><small><a href="https://leetcode.cn/problems/maximum-product-subarray/" rel="noopener noreferrer" target="_blank">阅读官方完整原题 ↗</a></small></div><div class="example-before">输入：[-2, 3, -4]
+期望结果：24</div></div><div class="study-section" data-study-step="2" id="p152-step2"><h4>02 / 先把题目读明白</h4><p>子数组非空且连续，负数与零都会影响乘积变化。</p><p>先确认：什么输入是合法的、最后返回或修改什么。暂时不需要猜算法名称。</p></div><div class="study-section" data-study-step="3" id="p152-step3"><h4>03 / 最直接的做法</h4><p>枚举所有区间累乘需要O(n²)。固定结尾可复用旧乘积，但负数会翻转大小，所以最大值与最小值都要保留。</p></div><div class="study-section" data-study-step="4" id="p152-step4"><h4>04 / 从直接做法推导改进</h4><p>负数会把最小乘积变成最大，因此只存最大状态不够。同时存以当前结尾的最大hi和最小lo，新值来自x、旧hi*x、旧lo*x三者。遇0时自然重新开始。</p></div><div class="study-section" data-study-step="5" id="p152-step5"><h4>05 / 定义状态与更新规则</h4><p>hi、lo是当前结尾最大和最小乘积；新候选为x、旧hi*x、旧lo*x；ans记录各结尾最大值。</p></div><div class="study-section" data-study-step="6" id="p152-step6"><h4>06 / 手推一个完整例子</h4><p>沿着下面的例子跟踪状态；每一步先自己预测，再看下一步。</p><ol class="trace"><li>[-2,3,-4]</li><li>初始hi=lo=-2</li><li>乘3后hi=3,lo=-6</li><li>乘-4后候选-4,-12,24，hi=24</li><li>答案24</li></ol></div><div class="study-section" data-study-step="7" id="p152-step7"><h4>07 / 把思路写成完整代码</h4><ul><li>都必须来自旧状态</li></ul><details class="implementation-details" open=""><summary>完整实现 · 点击收起后自己重写</summary><p class="code-caption">先对应上面的状态与更新规则理解代码，再运行验证。代码较长时可以左右滑动。</p><button class="study-copy" data-copy-id="p152-implementation">复制完整代码</button><pre class="study-code" id="p152-implementation"><code>from typing import List, Optional
+from collections import deque, Counter, defaultdict
+import heapq
+import math
+
+
+class Solution:
+    def maxProduct(self, nums: List[int]) -&gt; int:
+        hi = lo = ans = nums[0]
+        for i in range(1,len(nums)):
+            x = nums[i]
+            a,b = hi*x,lo*x  # 都必须来自旧状态
+            hi,lo = max(x,a,b),min(x,a,b)
+            ans = max(ans,hi)
+        return ans
+
+# 以下是本地构造与验证；提交力扣时只保留题目要求的类。
+
+if __name__ == "__main__":
+    assert Solution().maxProduct([-2,3,-4])==24
+    assert Solution().maxProduct([-2,0,-1])==0
+    print("自测通过")</code></pre></details></div><div class="study-section" data-study-step="8" id="p152-step8"><h4>08 / 验证、边界与复杂度</h4><p>检查复杂度：时间 O(n)，额外空间 O(1)。</p><details><summary>核对关键边界与易错点</summary><p>更新hi后再用它更新lo会混入新状态；先把三个候选计算出来。</p></details><details><summary>展开测试调用与期望结果</summary><pre><code>assert Solution().maxProduct([-2,3,-4])==24
+assert Solution().maxProduct([-2,0,-1])==0</code></pre></details><p>完整代码末尾已有本地断言；运行后显示“自测通过”。提交平台时只保留要求的类。</p></div><div class="study-section" data-study-step="9" id="p152-step9"><h4>09 / 理解后提炼记忆模板</h4><p>只记关键关系：hi、lo是当前结尾最大和最小乘积；新候选为x、旧hi*x、旧lo*x；ans记录各结尾最大值。</p><details class="memory-details"><summary>理解后展开可背核心</summary><p class="mem-hidden-note">先尝试自己写；这里省略本地测试与部分注释，用于复习，不替代前面的推导。</p><button class="study-copy" data-copy-id="p152-memory">复制可背核心</button><pre class="study-code" id="p152-memory"><code>def maxProduct(self, nums: List[int]) -&gt; int:
+    hi = lo = ans = nums[0]
+    for i in range(1,len(nums)):
+        x = nums[i]
+        a,b = hi*x,lo*x
+        hi,lo = max(x,a,b),min(x,a,b)
+        ans = max(ans,hi)
+    return ans</code></pre></details></div><div class="study-section" data-study-step="10" id="p152-step10"><h4>10 / 闭卷自测与学习打标</h4><div class="quiz"><p>这道题维护什么状态？哪一步更新顺序或边界最容易写错？先回答，再展开核对。</p><p class="code-note">通过示例不代表覆盖所有输入。再尝试最小规模、重复值或极端结构；隔天能独立复写再确认掌握。</p></div><p>合上完整实现，独立写出一次并用第08节的用例检查；能解释更新顺序后再打标。</p><p class="completion-label">记录本次完成方式</p><select aria-label="152的学习状态" class="status" data-id="152"><option value="">待练习</option><option value="covered">已覆盖 · 读过套路</option><option value="green">绿 · 独立完成</option><option value="yellow">黄 · 借助提示</option><option value="red">红 · 需要重练</option></select></div><div class="study-section" data-study-step="11" id="p152-step11"><h4>11 / 学完再看：题型识别与迁移</h4><p>当前题理解并能复写后，再做下面的归纳。第一次学习可以先跳过跨题链接。</p><details class="transfer-details"><summary>展开题型总结与迁移</summary><p>本题方法：线性动态规划。</p><p>识别前先核对约束：子数组非空且连续，负数与零都会影响乘积变化。</p><p>迁移时要重新检查状态含义、能否重复选择、连续性或有序性，不能只因为题名相似就照搬。</p></details></div></article><article class="card lesson" data-core="true" data-id="416" id="p416"><header class="lesson-head"><span class="no">416</span><h2>分割等和子集</h2><span class="badge">A · 重点盲写</span></header><nav aria-label="本题学习与复习入口" class="study-shortcuts"><span>第一次学：按 01 → 11 顺序阅读；已经学过：直接跳到需要的部分。</span><a data-study-jump="" href="#p416-step7">完整代码</a><a data-study-jump="" href="#p416-step9">记忆模板</a><a data-study-jump="" href="#p416-step10">闭卷自测</a><a data-study-jump="" href="#p416-step11">题型迁移</a></nav><div class="study-section" data-study-step="1" id="p416-step1"><h4>01 / 题目、约束与示例</h4><div class="task"><strong>题意与关键约束 · 学习版</strong><p>正整数数组能否分成两组，使两组和相等；每个数只能使用一次。</p><small><a href="https://leetcode.cn/problems/partition-equal-subset-sum/" rel="noopener noreferrer" target="_blank">阅读官方完整原题 ↗</a></small></div><div class="example-before">输入：[1, 5, 11, 5]
+期望结果：True（是）</div></div><div class="study-section" data-study-step="2" id="p416-step2"><h4>02 / 先把题目读明白</h4><p>每个元素恰好分到一组且只能使用一次；两组和相等，奇数总和必失败。</p><p>先确认：什么输入是合法的、最后返回或修改什么。暂时不需要猜算法名称。</p></div><div class="study-section" data-study-step="3" id="p416-step3"><h4>03 / 最直接的做法</h4><p>枚举所有子集检查是否达到总和一半需要O(2^n)。相同可达和可以合并成布尔状态，避免枚举每条选择路径。</p></div><div class="study-section" data-study-step="4" id="p416-step4"><h4>04 / 从直接做法推导改进</h4><p>总和为奇数直接失败；否则等价于能否选出和为total/2的子集。dp[s]表示可凑出s。每个数只用一次，容量从大到小更新，确保读取的dp[s-x]还是加入当前数之前的结果。</p></div><div class="study-section" data-study-step="5" id="p416-step5"><h4>05 / 定义状态与更新规则</h4><p>dp[s]表示可凑出s，dp[0]=True；处理数x时容量倒序，dp[s]取旧dp[s]或旧dp[s-x]。</p></div><div class="study-section" data-study-step="6" id="p416-step6"><h4>06 / 手推一个完整例子</h4><p>沿着下面的例子跟踪状态；每一步先自己预测，再看下一步。</p><ol class="trace"><li>[1,5,11,5]总22目标11</li><li>初始只可达0</li><li>加入1可达1</li><li>加入5可达5、6</li><li>加入11直接可达11，成功</li></ol></div><div class="study-section" data-study-step="7" id="p416-step7"><h4>07 / 把思路写成完整代码</h4><ul><li>倒序保护上一轮状态</li></ul><details class="implementation-details" open=""><summary>完整实现 · 点击收起后自己重写</summary><p class="code-caption">先对应上面的状态与更新规则理解代码，再运行验证。代码较长时可以左右滑动。</p><button class="study-copy" data-copy-id="p416-implementation">复制完整代码</button><pre class="study-code" id="p416-implementation"><code>from typing import List, Optional
+from collections import deque, Counter, defaultdict
+import heapq
+import math
+
+
+class Solution:
+    def canPartition(self, nums: List[int]) -&gt; bool:
+        total = sum(nums)
+        if total%2: return False
+        target = total//2
+        dp = [True]+[False]*target
+        for x in nums:
+            for s in range(target,x-1,-1):  # 倒序保护上一轮状态
+                dp[s] = dp[s] or dp[s-x]
+        return dp[target]
+
+# 以下是本地构造与验证；提交力扣时只保留题目要求的类。
+
+if __name__ == "__main__":
+    assert Solution().canPartition([1,5,11,5])
+    assert not Solution().canPartition([1,2,5])
+    print("自测通过")</code></pre></details></div><div class="study-section" data-study-step="8" id="p416-step8"><h4>08 / 验证、边界与复杂度</h4><p>检查复杂度：时间 O(n·target)，空间 O(target)。</p><details><summary>核对关键边界与易错点</summary><p>若容量正序，数1在同一轮会生成2、3等，相当于重复使用，错误变成完全背包。</p></details><details><summary>展开测试调用与期望结果</summary><pre><code>assert Solution().canPartition([1,5,11,5])
+assert not Solution().canPartition([1,2,5])</code></pre></details><p>完整代码末尾已有本地断言；运行后显示“自测通过”。提交平台时只保留要求的类。</p></div><div class="study-section" data-study-step="9" id="p416-step9"><h4>09 / 理解后提炼记忆模板</h4><p>只记关键关系：dp[s]表示可凑出s，dp[0]=True；处理数x时容量倒序，dp[s]取旧dp[s]或旧dp[s-x]。</p><details class="memory-details"><summary>理解后展开可背核心</summary><p class="mem-hidden-note">先尝试自己写；这里省略本地测试与部分注释，用于复习，不替代前面的推导。</p><button class="study-copy" data-copy-id="p416-memory">复制可背核心</button><pre class="study-code" id="p416-memory"><code>def canPartition(self, nums: List[int]) -&gt; bool:
+    total = sum(nums)
+    if total%2: return False
+    target = total//2
+    dp = [True]+[False]*target
+    for x in nums:
+        for s in range(target,x-1,-1):
+            dp[s] = dp[s] or dp[s-x]
+    return dp[target]</code></pre></details></div><div class="study-section" data-study-step="10" id="p416-step10"><h4>10 / 闭卷自测与学习打标</h4><div class="quiz"><p>这道题维护什么状态？哪一步更新顺序或边界最容易写错？先回答，再展开核对。</p><p class="code-note">通过示例不代表覆盖所有输入。再尝试最小规模、重复值或极端结构；隔天能独立复写再确认掌握。</p></div><p>合上完整实现，独立写出一次并用第08节的用例检查；能解释更新顺序后再打标。</p><p class="completion-label">记录本次完成方式</p><select aria-label="416的学习状态" class="status" data-id="416"><option value="">待练习</option><option value="covered">已覆盖 · 读过套路</option><option value="green">绿 · 独立完成</option><option value="yellow">黄 · 借助提示</option><option value="red">红 · 需要重练</option></select></div><div class="study-section" data-study-step="11" id="p416-step11"><h4>11 / 学完再看：题型识别与迁移</h4><p>当前题理解并能复写后，再做下面的归纳。第一次学习可以先跳过跨题链接。</p><details class="transfer-details"><summary>展开题型总结与迁移</summary><p>本题方法：01背包。</p><p>识别前先核对约束：每个元素恰好分到一组且只能使用一次；两组和相等，奇数总和必失败。</p><p>迁移时要重新检查状态含义、能否重复选择、连续性或有序性，不能只因为题名相似就照搬。</p></details></div></article><article class="card lesson" data-core="false" data-id="32" id="p32"><header class="lesson-head"><span class="no">32</span><h2>最长有效括号</h2><span class="badge b">B · 套路覆盖</span></header><nav aria-label="本题学习与复习入口" class="study-shortcuts"><span>第一次学：按 01 → 11 顺序阅读；已经学过：直接跳到需要的部分。</span><a data-study-jump="" href="#p32-step7">完整代码</a><a data-study-jump="" href="#p32-step9">记忆模板</a><a data-study-jump="" href="#p32-step10">闭卷自测</a><a data-study-jump="" href="#p32-step11">题型迁移</a></nav><div class="study-section" data-study-step="1" id="p32-step1"><h4>01 / 题目、约束与示例</h4><div class="task"><strong>题意与关键约束 · 学习版</strong><p>输入只含左右括号，返回最长连续且有效的括号子串长度。</p><small><a href="https://leetcode.cn/problems/longest-valid-parentheses/" rel="noopener noreferrer" target="_blank">阅读官方完整原题 ↗</a></small></div><div class="example-before">输入：'()(())'
+期望结果：6</div></div><div class="study-section" data-study-step="2" id="p32-step2"><h4>02 / 先把题目读明白</h4><p>求连续的有效括号子串长度，不是整个串能匹配多少对。</p><p>先确认：什么输入是合法的、最后返回或修改什么。暂时不需要猜算法名称。</p></div><div class="study-section" data-study-step="3" id="p32-step3"><h4>03 / 最直接的做法</h4><p>枚举全部子串再检查平衡会重复扫描。以右括号为结尾时，可以复用紧邻的已知有效段长度。</p></div><div class="study-section" data-study-step="4" id="p32-step4"><h4>04 / 从直接做法推导改进</h4><p>dp[i]表示以i结尾的最长有效长度，只有右括号才可能成为结尾。若前一字符是左括号，得到一对加上更前面的有效段；若前一字符是右括号，跨过前一有效段，寻找能匹配当前右括号的左括号。</p></div><div class="study-section" data-study-step="5" id="p32-step5"><h4>05 / 定义状态与更新规则</h4><p>dp[i]是以i结尾的最长有效长度；若前面为右括号，j=i-dp[i-1]-1查找外层左括号，再拼接j之前的有效段。</p></div><div class="study-section" data-study-step="6" id="p32-step6"><h4>06 / 手推一个完整例子</h4><p>沿着下面的例子跟踪状态；每一步先自己预测，再看下一步。</p><ol class="trace"><li>()(())</li><li>到i1得到dp1=2</li><li>到i4闭合内层，dp4=2</li><li>i5跨过dp4，到j=2的(匹配，再接dp1=2，总长6</li></ol></div><div class="study-section" data-study-step="7" id="p32-step7"><h4>07 / 把思路写成完整代码</h4><ul><li>跨过前一个完整有效段</li></ul><details class="implementation-details" open=""><summary>完整实现 · 点击收起后自己重写</summary><p class="code-caption">先对应上面的状态与更新规则理解代码，再运行验证。代码较长时可以左右滑动。</p><button class="study-copy" data-copy-id="p32-implementation">复制完整代码</button><pre class="study-code" id="p32-implementation"><code>from typing import List, Optional
+from collections import deque, Counter, defaultdict
+import heapq
+import math
+
+
+class Solution:
+    def longestValidParentheses(self, s: str) -&gt; int:
+        dp = [0]*len(s)
+        for i in range(1,len(s)):
+            if s[i]!=')': continue
+            if s[i-1]=='(':
+                dp[i] = 2+(dp[i-2] if i&gt;=2 else 0)
+            else:
+                j = i-dp[i-1]-1  # 跨过前一个完整有效段
+                if j&gt;=0 and s[j]=='(':
+                    dp[i] = dp[i-1]+2+(dp[j-1] if j&gt;=1 else 0)
+        return max(dp,default=0)
+
+# 以下是本地构造与验证；提交力扣时只保留题目要求的类。
+
+if __name__ == "__main__":
+    assert Solution().longestValidParentheses("()(())")==6
+    assert Solution().longestValidParentheses(")()())")==4
+    assert Solution().longestValidParentheses("")==0
+    print("自测通过")</code></pre></details></div><div class="study-section" data-study-step="8" id="p32-step8"><h4>08 / 验证、边界与复杂度</h4><p>检查复杂度：时间 O(n)，空间 O(n)。</p><details><summary>核对关键边界与易错点</summary><p>j=i-dp[i-1]-1可能小于0，必须先判断；找到外层配对后还要拼接它之前的有效段。</p></details><details><summary>展开测试调用与期望结果</summary><pre><code>assert Solution().longestValidParentheses("()(())")==6
+assert Solution().longestValidParentheses(")()())")==4
+assert Solution().longestValidParentheses("")==0</code></pre></details><p>完整代码末尾已有本地断言；运行后显示“自测通过”。提交平台时只保留要求的类。</p></div><div class="study-section" data-study-step="9" id="p32-step9"><h4>09 / 理解后提炼记忆模板</h4><p>只记关键关系：dp[i]是以i结尾的最长有效长度；若前面为右括号，j=i-dp[i-1]-1查找外层左括号，再拼接j之前的有效段。</p><details class="memory-details"><summary>理解后展开可背核心</summary><p class="mem-hidden-note">先尝试自己写；这里省略本地测试与部分注释，用于复习，不替代前面的推导。</p><button class="study-copy" data-copy-id="p32-memory">复制可背核心</button><pre class="study-code" id="p32-memory"><code>def longestValidParentheses(self, s: str) -&gt; int:
+    dp = [0]*len(s)
+    for i in range(1,len(s)):
+        if s[i]!=')': continue
+        if s[i-1]=='(':
+            dp[i] = 2+(dp[i-2] if i&gt;=2 else 0)
+        else:
+            j = i-dp[i-1]-1
+            if j&gt;=0 and s[j]=='(':
+                dp[i] = dp[i-1]+2+(dp[j-1] if j&gt;=1 else 0)
+    return max(dp,default=0)</code></pre></details></div><div class="study-section" data-study-step="10" id="p32-step10"><h4>10 / 闭卷自测与学习打标</h4><div class="quiz"><p>这道题维护什么状态？哪一步更新顺序或边界最容易写错？先回答，再展开核对。</p><p class="code-note">通过示例不代表覆盖所有输入。再尝试最小规模、重复值或极端结构；隔天能独立复写再确认掌握。</p></div><p>合上完整实现，独立写出一次并用第08节的用例检查；能解释更新顺序后再打标。</p><p class="completion-label">记录本次完成方式</p><select aria-label="32的学习状态" class="status" data-id="32"><option value="">待练习</option><option value="covered">已覆盖 · 读过套路</option><option value="green">绿 · 独立完成</option><option value="yellow">黄 · 借助提示</option><option value="red">红 · 需要重练</option></select></div><div class="study-section" data-study-step="11" id="p32-step11"><h4>11 / 学完再看：题型识别与迁移</h4><p>当前题理解并能复写后，再做下面的归纳。第一次学习可以先跳过跨题链接。</p><details class="transfer-details"><summary>展开题型总结与迁移</summary><p>本题方法：以当前位置结尾的DP。</p><p>识别前先核对约束：求连续的有效括号子串长度，不是整个串能匹配多少对。</p><p>迁移时要重新检查状态含义、能否重复选择、连续性或有序性，不能只因为题名相似就照搬。</p></details></div></article><article class="card lesson" data-core="false" data-id="62" id="p62"><header class="lesson-head"><span class="no">62</span><h2>不同路径</h2><span class="badge b">B · 套路覆盖</span></header><nav aria-label="本题学习与复习入口" class="study-shortcuts"><span>第一次学：按 01 → 11 顺序阅读；已经学过：直接跳到需要的部分。</span><a data-study-jump="" href="#p62-step7">完整代码</a><a data-study-jump="" href="#p62-step9">记忆模板</a><a data-study-jump="" href="#p62-step10">闭卷自测</a><a data-study-jump="" href="#p62-step11">题型迁移</a></nav><div class="study-section" data-study-step="1" id="p62-step1"><h4>01 / 题目、约束与示例</h4><div class="task"><strong>题意与关键约束 · 学习版</strong><p>在m×n网格从左上到右下，只能向右或向下，求不同路径总数。</p><small><a href="https://leetcode.cn/problems/unique-paths/" rel="noopener noreferrer" target="_blank">阅读官方完整原题 ↗</a></small></div><div class="example-before">输入：3；3
+期望结果：6</div></div><div class="study-section" data-study-step="2" id="p62-step2"><h4>02 / 先把题目读明白</h4><p>只能向右或向下，不存在回退；求路径条数，不是最短距离。</p><p>先确认：什么输入是合法的、最后返回或修改什么。暂时不需要猜算法名称。</p></div><div class="study-section" data-study-step="3" id="p62-step3"><h4>03 / 最直接的做法</h4><p>递归枚举右与下两种选择会重复经过相同格子。每格只需汇总上方、左方已经计算的路径数。</p></div><div class="study-section" data-study-step="4" id="p62-step4"><h4>04 / 从直接做法推导改进</h4><p>到达(i,j)的最后一步来自上方或左方，两类路径不重叠。dp[j]滚动保存当前行，更新前是上方，dp[j-1]更新后是左方。第一行与第一列只有一种走法。</p></div><div class="study-section" data-study-step="5" id="p62-step5"><h4>05 / 定义状态与更新规则</h4><p>dp[j]更新前代表上方，dp[j-1]更新后代表当前行左方；两者相加，首行首列初始化为1。</p></div><div class="study-section" data-study-step="6" id="p62-step6"><h4>06 / 手推一个完整例子</h4><p>沿着下面的例子跟踪状态；每一步先自己预测，再看下一步。</p><ol class="trace"><li>m=3,n=3</li><li>初始[1,1,1]</li><li>第二行更新成[1,2,3]</li><li>第三行成[1,3,6]</li><li>答案6</li></ol></div><div class="study-section" data-study-step="7" id="p62-step7"><h4>07 / 把思路写成完整代码</h4><ul><li>旧上方 + 新左方</li></ul><details class="implementation-details" open=""><summary>完整实现 · 点击收起后自己重写</summary><p class="code-caption">先对应上面的状态与更新规则理解代码，再运行验证。代码较长时可以左右滑动。</p><button class="study-copy" data-copy-id="p62-implementation">复制完整代码</button><pre class="study-code" id="p62-implementation"><code>from typing import List, Optional
+from collections import deque, Counter, defaultdict
+import heapq
+import math
+
+
+class Solution:
+    def uniquePaths(self, m: int, n: int) -&gt; int:
+        dp = [1]*n
+        for _ in range(1,m):
+            for j in range(1,n):
+                dp[j] += dp[j-1]  # 旧上方 + 新左方
+        return dp[-1]
+
+# 以下是本地构造与验证；提交力扣时只保留题目要求的类。
+
+if __name__ == "__main__":
+    assert Solution().uniquePaths(3,3)==6
+    assert Solution().uniquePaths(1,5)==1
+    print("自测通过")</code></pre></details></div><div class="study-section" data-study-step="8" id="p62-step8"><h4>08 / 验证、边界与复杂度</h4><p>检查复杂度：时间 O(mn)，空间 O(n)。</p><details><summary>核对关键边界与易错点</summary><p>遍历列要从左到右，才能读到当前行已经更新的左邻状态。</p></details><details><summary>展开测试调用与期望结果</summary><pre><code>assert Solution().uniquePaths(3,3)==6
+assert Solution().uniquePaths(1,5)==1</code></pre></details><p>完整代码末尾已有本地断言；运行后显示“自测通过”。提交平台时只保留要求的类。</p></div><div class="study-section" data-study-step="9" id="p62-step9"><h4>09 / 理解后提炼记忆模板</h4><p>只记关键关系：dp[j]更新前代表上方，dp[j-1]更新后代表当前行左方；两者相加，首行首列初始化为1。</p><details class="memory-details"><summary>理解后展开可背核心</summary><p class="mem-hidden-note">先尝试自己写；这里省略本地测试与部分注释，用于复习，不替代前面的推导。</p><button class="study-copy" data-copy-id="p62-memory">复制可背核心</button><pre class="study-code" id="p62-memory"><code>def uniquePaths(self, m: int, n: int) -&gt; int:
+    dp = [1]*n
+    for _ in range(1,m):
+        for j in range(1,n):
+            dp[j] += dp[j-1]
+    return dp[-1]</code></pre></details></div><div class="study-section" data-study-step="10" id="p62-step10"><h4>10 / 闭卷自测与学习打标</h4><div class="quiz"><p>这道题维护什么状态？哪一步更新顺序或边界最容易写错？先回答，再展开核对。</p><p class="code-note">通过示例不代表覆盖所有输入。再尝试最小规模、重复值或极端结构；隔天能独立复写再确认掌握。</p></div><p>合上完整实现，独立写出一次并用第08节的用例检查；能解释更新顺序后再打标。</p><p class="completion-label">记录本次完成方式</p><select aria-label="62的学习状态" class="status" data-id="62"><option value="">待练习</option><option value="covered">已覆盖 · 读过套路</option><option value="green">绿 · 独立完成</option><option value="yellow">黄 · 借助提示</option><option value="red">红 · 需要重练</option></select></div><div class="study-section" data-study-step="11" id="p62-step11"><h4>11 / 学完再看：题型识别与迁移</h4><p>当前题理解并能复写后，再做下面的归纳。第一次学习可以先跳过跨题链接。</p><details class="transfer-details"><summary>展开题型总结与迁移</summary><p>本题方法：网格路径DP。</p><p>识别前先核对约束：只能向右或向下，不存在回退；求路径条数，不是最短距离。</p><p>迁移时要重新检查状态含义、能否重复选择、连续性或有序性，不能只因为题名相似就照搬。</p></details></div></article><article class="card lesson" data-core="false" data-id="64" id="p64"><header class="lesson-head"><span class="no">64</span><h2>最小路径和</h2><span class="badge b">B · 套路覆盖</span></header><nav aria-label="本题学习与复习入口" class="study-shortcuts"><span>第一次学：按 01 → 11 顺序阅读；已经学过：直接跳到需要的部分。</span><a data-study-jump="" href="#p64-step7">完整代码</a><a data-study-jump="" href="#p64-step9">记忆模板</a><a data-study-jump="" href="#p64-step10">闭卷自测</a><a data-study-jump="" href="#p64-step11">题型迁移</a></nav><div class="study-section" data-study-step="1" id="p64-step1"><h4>01 / 题目、约束与示例</h4><div class="task"><strong>题意与关键约束 · 学习版</strong><p>非负数字网格，只向右或向下走，求左上到右下路径的最小元素和。</p><small><a href="https://leetcode.cn/problems/minimum-path-sum/" rel="noopener noreferrer" target="_blank">阅读官方完整原题 ↗</a></small></div><div class="example-before">输入：[[1, 3, 1], [1, 5, 1], [4, 2, 1]]
+期望结果：7</div></div><div class="study-section" data-study-step="2" id="p64-step2"><h4>02 / 先把题目读明白</h4><p>路径包含起点和终点的值，只向右或向下，返回最小总和。</p><p>先确认：什么输入是合法的、最后返回或修改什么。暂时不需要猜算法名称。</p></div><div class="study-section" data-study-step="3" id="p64-step3"><h4>03 / 最直接的做法</h4><p>枚举所有路径后比较代价会重复处理相同格子。到某格的最优路径只可能从其上方或左方最优路径延伸。</p></div><div class="study-section" data-study-step="4" id="p64-step4"><h4>04 / 从直接做法推导改进</h4><p>与62同样来源于上方和左方，但将“路径数相加”改为“两个路径代价取较小再加当前格”。左上特殊初始化，其他缺失邻居视为正无穷。</p></div><div class="study-section" data-study-step="5" id="p64-step5"><h4>05 / 定义状态与更新规则</h4><p>dp[j]旧值代表上方代价，dp[j-1]新值代表左方；当前值为二者较小者加格子值，缺失邻居视作∞。</p></div><div class="study-section" data-study-step="6" id="p64-step6"><h4>06 / 手推一个完整例子</h4><p>沿着下面的例子跟踪状态；每一步先自己预测，再看下一步。</p><ol class="trace"><li>[[1,3,1],[1,5,1],[4,2,1]]</li><li>首行累计1,4,5</li><li>次行2,7,6</li><li>第三行6,8,7</li><li>答案7</li></ol></div><div class="study-section" data-study-step="7" id="p64-step7"><h4>07 / 把思路写成完整代码</h4><p>先对照上面的状态定义找到初始化语句，再看循环或递归如何缩小问题，最后确认返回值对应题目要求。完整代码与核心版采用同一算法。</p><details class="implementation-details" open=""><summary>完整实现 · 点击收起后自己重写</summary><p class="code-caption">先对应上面的状态与更新规则理解代码，再运行验证。代码较长时可以左右滑动。</p><button class="study-copy" data-copy-id="p64-implementation">复制完整代码</button><pre class="study-code" id="p64-implementation"><code>from typing import List, Optional
+from collections import deque, Counter, defaultdict
+import heapq
+import math
+
+
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -&gt; int:
+        n = len(grid[0])
+        dp = [float('inf')]*n
+        dp[0] = 0
+        for row in grid:
+            for j,x in enumerate(row):
+                left = dp[j-1] if j&gt;0 else float('inf')
+                dp[j] = min(dp[j],left)+x
+        return dp[-1]
+
+# 以下是本地构造与验证；提交力扣时只保留题目要求的类。
+
+if __name__ == "__main__":
+    assert Solution().minPathSum([[1,3,1],[1,5,1],[4,2,1]])==7
+    assert Solution().minPathSum([[3]])==3
+    print("自测通过")</code></pre></details></div><div class="study-section" data-study-step="8" id="p64-step8"><h4>08 / 验证、边界与复杂度</h4><p>检查复杂度：时间 O(mn)，空间 O(n)，不修改原网格。</p><details><summary>核对关键边界与易错点</summary><p>初始化为0会让边界从网格外免费进入；不可达邻居要用∞。</p></details><details><summary>展开测试调用与期望结果</summary><pre><code>assert Solution().minPathSum([[1,3,1],[1,5,1],[4,2,1]])==7
+assert Solution().minPathSum([[3]])==3</code></pre></details><p>完整代码末尾已有本地断言；运行后显示“自测通过”。提交平台时只保留要求的类。</p></div><div class="study-section" data-study-step="9" id="p64-step9"><h4>09 / 理解后提炼记忆模板</h4><p>只记关键关系：dp[j]旧值代表上方代价，dp[j-1]新值代表左方；当前值为二者较小者加格子值，缺失邻居视作∞。</p><details class="memory-details"><summary>理解后展开可背核心</summary><p class="mem-hidden-note">先尝试自己写；这里省略本地测试与部分注释，用于复习，不替代前面的推导。</p><button class="study-copy" data-copy-id="p64-memory">复制可背核心</button><pre class="study-code" id="p64-memory"><code>def minPathSum(self, grid: List[List[int]]) -&gt; int:
+    n = len(grid[0])
+    dp = [float('inf')]*n
+    dp[0] = 0
+    for row in grid:
+        for j,x in enumerate(row):
+            left = dp[j-1] if j&gt;0 else float('inf')
+            dp[j] = min(dp[j],left)+x
+    return dp[-1]</code></pre></details></div><div class="study-section" data-study-step="10" id="p64-step10"><h4>10 / 闭卷自测与学习打标</h4><div class="quiz"><p>这道题维护什么状态？哪一步更新顺序或边界最容易写错？先回答，再展开核对。</p><p class="code-note">通过示例不代表覆盖所有输入。再尝试最小规模、重复值或极端结构；隔天能独立复写再确认掌握。</p></div><p>合上完整实现，独立写出一次并用第08节的用例检查；能解释更新顺序后再打标。</p><p class="completion-label">记录本次完成方式</p><select aria-label="64的学习状态" class="status" data-id="64"><option value="">待练习</option><option value="covered">已覆盖 · 读过套路</option><option value="green">绿 · 独立完成</option><option value="yellow">黄 · 借助提示</option><option value="red">红 · 需要重练</option></select></div><div class="study-section" data-study-step="11" id="p64-step11"><h4>11 / 学完再看：题型识别与迁移</h4><p>当前题理解并能复写后，再做下面的归纳。第一次学习可以先跳过跨题链接。</p><details class="transfer-details"><summary>展开题型总结与迁移</summary><p>本题方法：网格路径DP。</p><p>识别前先核对约束：路径包含起点和终点的值，只向右或向下，返回最小总和。</p><p>迁移时要重新检查状态含义、能否重复选择、连续性或有序性，不能只因为题名相似就照搬。</p></details></div></article><article class="card lesson" data-core="true" data-id="1143" id="p1143"><header class="lesson-head"><span class="no">1143</span><h2>最长公共子序列</h2><span class="badge">A · 重点盲写</span></header><nav aria-label="本题学习与复习入口" class="study-shortcuts"><span>第一次学：按 01 → 11 顺序阅读；已经学过：直接跳到需要的部分。</span><a data-study-jump="" href="#p1143-step7">完整代码</a><a data-study-jump="" href="#p1143-step9">记忆模板</a><a data-study-jump="" href="#p1143-step10">闭卷自测</a><a data-study-jump="" href="#p1143-step11">题型迁移</a></nav><div class="study-section" data-study-step="1" id="p1143-step1"><h4>01 / 题目、约束与示例</h4><div class="task"><strong>题意与关键约束 · 学习版</strong><p>返回两个字符串最长公共子序列长度，允许跳过字符，但相对顺序不变。</p><small><a href="https://leetcode.cn/problems/longest-common-subsequence/" rel="noopener noreferrer" target="_blank">阅读官方完整原题 ↗</a></small></div><div class="example-before">输入：'abc'；'ac'
+期望结果：2</div></div><div class="study-section" data-study-step="2" id="p1143-step2"><h4>02 / 先把题目读明白</h4><p>公共子序列可跳过字符，要求在两个串中的相对次序都保留。</p><p>先确认：什么输入是合法的、最后返回或修改什么。暂时不需要猜算法名称。</p></div><div class="study-section" data-study-step="3" id="p1143-step3"><h4>03 / 最直接的做法</h4><p>枚举一个串所有子序列，再检查另一个串，代价指数级。两个前缀的最优匹配结果可通过末字符情况递推。</p></div><div class="study-section" data-study-step="4" id="p1143-step4"><h4>04 / 从直接做法推导改进</h4><p>dp[i][j]表示两个前缀长度分别为i、j时的答案。末字符相同就取左上加1；不同则必须舍弃其中一个末字符，取上方或左方较大者。第0行列为空前缀，均为0。</p></div><div class="study-section" data-study-step="5" id="p1143-step5"><h4>05 / 定义状态与更新规则</h4><p>dp[i][j]是两前缀的LCS长度；末字符同取左上+1，不同取上方和左方最大值；空前缀为0。</p></div><div class="study-section" data-study-step="6" id="p1143-step6"><h4>06 / 手推一个完整例子</h4><p>沿着下面的例子跟踪状态；每一步先自己预测，再看下一步。</p><ol class="trace"><li>abc与ac</li><li>前缀a/a匹配得1</li><li>ab/ac仍为1</li><li>abc/ac末尾c匹配，接ab/a的1得到2</li></ol></div><div class="study-section" data-study-step="7" id="p1143-step7"><h4>07 / 把思路写成完整代码</h4><p>先对照上面的状态定义找到初始化语句，再看循环或递归如何缩小问题，最后确认返回值对应题目要求。完整代码与核心版采用同一算法。</p><details class="implementation-details" open=""><summary>完整实现 · 点击收起后自己重写</summary><p class="code-caption">先对应上面的状态与更新规则理解代码，再运行验证。代码较长时可以左右滑动。</p><button class="study-copy" data-copy-id="p1143-implementation">复制完整代码</button><pre class="study-code" id="p1143-implementation"><code>from typing import List, Optional
+from collections import deque, Counter, defaultdict
+import heapq
+import math
+
+
+class Solution:
+    def longestCommonSubsequence(self, text1: str, text2: str) -&gt; int:
+        m,n = len(text1),len(text2)
+        dp = [[0]*(n+1) for _ in range(m+1)]
+        for i in range(1,m+1):
+            for j in range(1,n+1):
+                if text1[i-1]==text2[j-1]:
+                    dp[i][j] = dp[i-1][j-1]+1
+                else:
+                    dp[i][j] = max(dp[i-1][j],dp[i][j-1])
+        return dp[m][n]
+
+# 以下是本地构造与验证；提交力扣时只保留题目要求的类。
+
+if __name__ == "__main__":
+    assert Solution().longestCommonSubsequence("abc","ac")==2
+    assert Solution().longestCommonSubsequence("abc","def")==0
+    print("自测通过")</code></pre></details></div><div class="study-section" data-study-step="8" id="p1143-step8"><h4>08 / 验证、边界与复杂度</h4><p>检查复杂度：时间 O(mn)，空间 O(mn)，可滚动优化至 O(min(m,n))。</p><details><summary>核对关键边界与易错点</summary><p>不同字符时不是取左上；需要比较跳过一边的两种选择。</p></details><details><summary>展开测试调用与期望结果</summary><pre><code>assert Solution().longestCommonSubsequence("abc","ac")==2
+assert Solution().longestCommonSubsequence("abc","def")==0</code></pre></details><p>完整代码末尾已有本地断言；运行后显示“自测通过”。提交平台时只保留要求的类。</p></div><div class="study-section" data-study-step="9" id="p1143-step9"><h4>09 / 理解后提炼记忆模板</h4><p>只记关键关系：dp[i][j]是两前缀的LCS长度；末字符同取左上+1，不同取上方和左方最大值；空前缀为0。</p><details class="memory-details"><summary>理解后展开可背核心</summary><p class="mem-hidden-note">先尝试自己写；这里省略本地测试与部分注释，用于复习，不替代前面的推导。</p><button class="study-copy" data-copy-id="p1143-memory">复制可背核心</button><pre class="study-code" id="p1143-memory"><code>def longestCommonSubsequence(self, text1: str, text2: str) -&gt; int:
+    m,n = len(text1),len(text2)
+    dp = [[0]*(n+1) for _ in range(m+1)]
+    for i in range(1,m+1):
+        for j in range(1,n+1):
+            if text1[i-1]==text2[j-1]:
+                dp[i][j] = dp[i-1][j-1]+1
+            else:
+                dp[i][j] = max(dp[i-1][j],dp[i][j-1])
+    return dp[m][n]</code></pre></details></div><div class="study-section" data-study-step="10" id="p1143-step10"><h4>10 / 闭卷自测与学习打标</h4><div class="quiz"><p>这道题维护什么状态？哪一步更新顺序或边界最容易写错？先回答，再展开核对。</p><p class="code-note">通过示例不代表覆盖所有输入。再尝试最小规模、重复值或极端结构；隔天能独立复写再确认掌握。</p></div><p>合上完整实现，独立写出一次并用第08节的用例检查；能解释更新顺序后再打标。</p><p class="completion-label">记录本次完成方式</p><select aria-label="1143的学习状态" class="status" data-id="1143"><option value="">待练习</option><option value="covered">已覆盖 · 读过套路</option><option value="green">绿 · 独立完成</option><option value="yellow">黄 · 借助提示</option><option value="red">红 · 需要重练</option></select></div><div class="study-section" data-study-step="11" id="p1143-step11"><h4>11 / 学完再看：题型识别与迁移</h4><p>当前题理解并能复写后，再做下面的归纳。第一次学习可以先跳过跨题链接。</p><details class="transfer-details"><summary>展开题型总结与迁移</summary><p>本题方法：双前缀DP。</p><p>识别前先核对约束：公共子序列可跳过字符，要求在两个串中的相对次序都保留。</p><p>迁移时要重新检查状态含义、能否重复选择、连续性或有序性，不能只因为题名相似就照搬。</p><p class="jump-link">知识迁移：<a href="Day7_动态规划.html#p72">对照 Day 7 · 第 72 题 →</a></p></details></div></article><article class="card lesson" data-core="false" data-id="5" id="p5"><header class="lesson-head"><span class="no">5</span><h2>最长回文子串</h2><span class="badge b">B · 套路覆盖</span></header><nav aria-label="本题学习与复习入口" class="study-shortcuts"><span>第一次学：按 01 → 11 顺序阅读；已经学过：直接跳到需要的部分。</span><a data-study-jump="" href="#p5-step7">完整代码</a><a data-study-jump="" href="#p5-step9">记忆模板</a><a data-study-jump="" href="#p5-step10">闭卷自测</a><a data-study-jump="" href="#p5-step11">题型迁移</a></nav><div class="study-section" data-study-step="1" id="p5-step1"><h4>01 / 题目、约束与示例</h4><div class="task"><strong>题意与关键约束 · 学习版</strong><p>返回字符串中最长的连续回文子串，多个同长答案返回任意一个。</p><small><a href="https://leetcode.cn/problems/longest-palindromic-substring/" rel="noopener noreferrer" target="_blank">阅读官方完整原题 ↗</a></small></div><div class="example-before">输入：'cbbd'
+期望结果：'bb'</div></div><div class="study-section" data-study-step="2" id="p5-step2"><h4>02 / 先把题目读明白</h4><p>返回连续回文子串本身，不是长度；同长答案可返回任意一个。</p><p>先确认：什么输入是合法的、最后返回或修改什么。暂时不需要猜算法名称。</p></div><div class="study-section" data-study-step="3" id="p5-step3"><h4>03 / 最直接的做法</h4><p>枚举全部区间再逐个检查回文需要O(n³)。外层两端相等时只需知道内部是否回文，可复用较短区间结果。</p></div><div class="study-section" data-study-step="4" id="p5-step4"><h4>04 / 从直接做法推导改进</h4><p>本日主线用区间DP：pal[i][j]表示闭区间是否回文。两端相等且内部是回文才成立；长度1、2只检查两端。i倒序保证内部状态已计算。也可用中心扩展在 O(1) 额外空间完成，是值得掌握的替代方案。</p></div><div class="study-section" data-study-step="5" id="p5-step5"><h4>05 / 定义状态与更新规则</h4><p>pal[i][j]表示闭区间回文；i倒序保证内部已求好；start与length记录最长区间，长度1、2单独通过短路判断。</p></div><div class="study-section" data-study-step="6" id="p5-step6"><h4>06 / 手推一个完整例子</h4><p>沿着下面的例子跟踪状态；每一步先自己预测，再看下一步。</p><ol class="trace"><li>babad</li><li>单字符先成立</li><li>bab两端b相等且内部a回文，长度3</li><li>aba同样长度3</li><li>任选bab或aba返回</li></ol></div><div class="study-section" data-study-step="7" id="p5-step7"><h4>07 / 把思路写成完整代码</h4><p>先对照上面的状态定义找到初始化语句，再看循环或递归如何缩小问题，最后确认返回值对应题目要求。完整代码与核心版采用同一算法。</p><details class="implementation-details" open=""><summary>完整实现 · 点击收起后自己重写</summary><p class="code-caption">先对应上面的状态与更新规则理解代码，再运行验证。代码较长时可以左右滑动。</p><button class="study-copy" data-copy-id="p5-implementation">复制完整代码</button><pre class="study-code" id="p5-implementation"><code>from typing import List, Optional
+from collections import deque, Counter, defaultdict
+import heapq
+import math
+
+
+class Solution:
+    def longestPalindrome(self, s: str) -&gt; str:
+        n = len(s)
+        pal = [[False]*n for _ in range(n)]
+        start, length = 0, 0
+        for i in range(n-1,-1,-1):
+            for j in range(i,n):
+                pal[i][j] = s[i]==s[j] and (j-i&lt;2 or pal[i+1][j-1])
+                if pal[i][j] and j-i+1&gt;length:
+                    start,length = i,j-i+1
+        return s[start:start+length]
+
+# 以下是本地构造与验证；提交力扣时只保留题目要求的类。
+
+if __name__ == "__main__":
+    assert Solution().longestPalindrome("babad") in {"bab","aba"}
+    assert Solution().longestPalindrome("cbbd")=="bb"
+    print("自测通过")</code></pre></details></div><div class="study-section" data-study-step="8" id="p5-step8"><h4>08 / 验证、边界与复杂度</h4><p>检查复杂度：时间 O(n²)，空间 O(n²)；中心扩展可保持 O(n²) 时间、O(1)辅助空间。</p><details><summary>核对关键边界与易错点</summary><p>子串必须连续；不要误用1143的跳过字符转移。</p></details><details><summary>展开测试调用与期望结果</summary><pre><code>assert Solution().longestPalindrome("babad") in {"bab","aba"}
+assert Solution().longestPalindrome("cbbd")=="bb"</code></pre></details><p>完整代码末尾已有本地断言；运行后显示“自测通过”。提交平台时只保留要求的类。</p></div><div class="study-section" data-study-step="9" id="p5-step9"><h4>09 / 理解后提炼记忆模板</h4><p>只记关键关系：pal[i][j]表示闭区间回文；i倒序保证内部已求好；start与length记录最长区间，长度1、2单独通过短路判断。</p><details class="memory-details"><summary>理解后展开可背核心</summary><p class="mem-hidden-note">先尝试自己写；这里省略本地测试与部分注释，用于复习，不替代前面的推导。</p><button class="study-copy" data-copy-id="p5-memory">复制可背核心</button><pre class="study-code" id="p5-memory"><code>def longestPalindrome(self, s: str) -&gt; str:
+    n = len(s)
+    pal = [[False]*n for _ in range(n)]
+    start, length = 0, 0
+    for i in range(n-1,-1,-1):
+        for j in range(i,n):
+            pal[i][j] = s[i]==s[j] and (j-i&lt;2 or pal[i+1][j-1])
+            if pal[i][j] and j-i+1&gt;length:
+                start,length = i,j-i+1
+    return s[start:start+length]</code></pre></details></div><div class="study-section" data-study-step="10" id="p5-step10"><h4>10 / 闭卷自测与学习打标</h4><div class="quiz"><p>这道题维护什么状态？哪一步更新顺序或边界最容易写错？先回答，再展开核对。</p><p class="code-note">通过示例不代表覆盖所有输入。再尝试最小规模、重复值或极端结构；隔天能独立复写再确认掌握。</p></div><p>合上完整实现，独立写出一次并用第08节的用例检查；能解释更新顺序后再打标。</p><p class="completion-label">记录本次完成方式</p><select aria-label="5的学习状态" class="status" data-id="5"><option value="">待练习</option><option value="covered">已覆盖 · 读过套路</option><option value="green">绿 · 独立完成</option><option value="yellow">黄 · 借助提示</option><option value="red">红 · 需要重练</option></select></div><div class="study-section" data-study-step="11" id="p5-step11"><h4>11 / 学完再看：题型识别与迁移</h4><p>当前题理解并能复写后，再做下面的归纳。第一次学习可以先跳过跨题链接。</p><details class="transfer-details"><summary>展开题型总结与迁移</summary><p>本题方法：区间回文DP。</p><p>识别前先核对约束：返回连续回文子串本身，不是长度；同长答案可返回任意一个。</p><p>迁移时要重新检查状态含义、能否重复选择、连续性或有序性，不能只因为题名相似就照搬。</p><p class="jump-link">知识迁移：<a href="Day5_回溯_二分.html#p131">对照 Day 5 · 第 131 题 →</a></p></details></div></article><article class="card lesson" data-core="true" data-id="72" id="p72"><header class="lesson-head"><span class="no">72</span><h2>编辑距离</h2><span class="badge">A · 重点盲写</span></header><nav aria-label="本题学习与复习入口" class="study-shortcuts"><span>第一次学：按 01 → 11 顺序阅读；已经学过：直接跳到需要的部分。</span><a data-study-jump="" href="#p72-step7">完整代码</a><a data-study-jump="" href="#p72-step9">记忆模板</a><a data-study-jump="" href="#p72-step10">闭卷自测</a><a data-study-jump="" href="#p72-step11">题型迁移</a></nav><div class="study-section" data-study-step="1" id="p72-step1"><h4>01 / 题目、约束与示例</h4><div class="task"><strong>题意与关键约束 · 学习版</strong><p>把word1变为word2，可插入、删除、替换一个字符，求最少操作次数。</p><small><a href="https://leetcode.cn/problems/edit-distance/" rel="noopener noreferrer" target="_blank">阅读官方完整原题 ↗</a></small></div><div class="example-before">输入：'horse'；'ros'
+期望结果：3</div></div><div class="study-section" data-study-step="2" id="p72-step2"><h4>02 / 先把题目读明白</h4><p>允许插入、删除、替换，求最少操作数；空串转换也有代价。</p><p>先确认：什么输入是合法的、最后返回或修改什么。暂时不需要猜算法名称。</p></div><div class="study-section" data-study-step="3" id="p72-step3"><h4>03 / 最直接的做法</h4><p>递归枚举最后一次操作会反复处理同一对前缀。用二维表保存前缀转换代价，每对前缀只计算一次。</p></div><div class="study-section" data-study-step="4" id="p72-step4"><h4>04 / 从直接做法推导改进</h4><p>dp[i][j]表示前i个字符变为前j个字符的最少操作数。末字符相同不操作，沿左上；否则删除对应上方+1，插入对应左方+1，替换对应左上+1，三者取最小。空串转换需要插入或删除全部字符。</p></div><div class="study-section" data-study-step="5" id="p72-step5"><h4>05 / 定义状态与更新规则</h4><p>dp[i][j]是word1前i字符变word2前j字符的最少编辑；同字符取左上，否则取删、插、换三个前驱最小值加1。</p></div><div class="study-section" data-study-step="6" id="p72-step6"><h4>06 / 手推一个完整例子</h4><p>沿着下面的例子跟踪状态；每一步先自己预测，再看下一步。</p><ol class="trace"><li>horse→ros</li><li>一种最优过程：horse替换h为r成rorse</li><li>删第二个r成rose</li><li>删e成ros</li><li>共3步，DP枚举所有最后操作保证最少</li></ol></div><div class="study-section" data-study-step="7" id="p72-step7"><h4>07 / 把思路写成完整代码</h4><p>先对照上面的状态定义找到初始化语句，再看循环或递归如何缩小问题，最后确认返回值对应题目要求。完整代码与核心版采用同一算法。</p><details class="implementation-details" open=""><summary>完整实现 · 点击收起后自己重写</summary><p class="code-caption">先对应上面的状态与更新规则理解代码，再运行验证。代码较长时可以左右滑动。</p><button class="study-copy" data-copy-id="p72-implementation">复制完整代码</button><pre class="study-code" id="p72-implementation"><code>from typing import List, Optional
+from collections import deque, Counter, defaultdict
+import heapq
+import math
+
+
+class Solution:
+    def minDistance(self, word1: str, word2: str) -&gt; int:
+        m,n = len(word1),len(word2)
+        dp = [[0]*(n+1) for _ in range(m+1)]
+        for i in range(m+1): dp[i][0]=i
+        for j in range(n+1): dp[0][j]=j
+        for i in range(1,m+1):
+            for j in range(1,n+1):
+                if word1[i-1]==word2[j-1]: dp[i][j]=dp[i-1][j-1]
+                else:
+                    dp[i][j]=1+min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1])
+        return dp[m][n]
+
+# 以下是本地构造与验证；提交力扣时只保留题目要求的类。
+
+if __name__ == "__main__":
+    assert Solution().minDistance("horse","ros")==3
+    assert Solution().minDistance("","abc")==3
+    print("自测通过")</code></pre></details></div><div class="study-section" data-study-step="8" id="p72-step8"><h4>08 / 验证、边界与复杂度</h4><p>检查复杂度：时间 O(mn)，空间 O(mn)；可滚动优化，但先理解三种转移的语义。</p><details><summary>核对关键边界与易错点</summary><p>首行是0..n、首列是0..m；全初始化为0会漏算与空串之间的编辑代价。</p></details><details><summary>展开测试调用与期望结果</summary><pre><code>assert Solution().minDistance("horse","ros")==3
+assert Solution().minDistance("","abc")==3</code></pre></details><p>完整代码末尾已有本地断言；运行后显示“自测通过”。提交平台时只保留要求的类。</p></div><div class="study-section" data-study-step="9" id="p72-step9"><h4>09 / 理解后提炼记忆模板</h4><p>只记关键关系：dp[i][j]是word1前i字符变word2前j字符的最少编辑；同字符取左上，否则取删、插、换三个前驱最小值加1。</p><details class="memory-details"><summary>理解后展开可背核心</summary><p class="mem-hidden-note">先尝试自己写；这里省略本地测试与部分注释，用于复习，不替代前面的推导。</p><button class="study-copy" data-copy-id="p72-memory">复制可背核心</button><pre class="study-code" id="p72-memory"><code>def minDistance(self, word1: str, word2: str) -&gt; int:
+    m,n = len(word1),len(word2)
+    dp = [[0]*(n+1) for _ in range(m+1)]
+    for i in range(m+1): dp[i][0]=i
+    for j in range(n+1): dp[0][j]=j
+    for i in range(1,m+1):
+        for j in range(1,n+1):
+            if word1[i-1]==word2[j-1]: dp[i][j]=dp[i-1][j-1]
+            else:
+                dp[i][j]=1+min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1])
+    return dp[m][n]</code></pre></details></div><div class="study-section" data-study-step="10" id="p72-step10"><h4>10 / 闭卷自测与学习打标</h4><div class="quiz"><p>这道题维护什么状态？哪一步更新顺序或边界最容易写错？先回答，再展开核对。</p><p class="code-note">通过示例不代表覆盖所有输入。再尝试最小规模、重复值或极端结构；隔天能独立复写再确认掌握。</p></div><p>合上完整实现，独立写出一次并用第08节的用例检查；能解释更新顺序后再打标。</p><p class="completion-label">记录本次完成方式</p><select aria-label="72的学习状态" class="status" data-id="72"><option value="">待练习</option><option value="covered">已覆盖 · 读过套路</option><option value="green">绿 · 独立完成</option><option value="yellow">黄 · 借助提示</option><option value="red">红 · 需要重练</option></select></div><div class="study-section" data-study-step="11" id="p72-step11"><h4>11 / 学完再看：题型识别与迁移</h4><p>当前题理解并能复写后，再做下面的归纳。第一次学习可以先跳过跨题链接。</p><details class="transfer-details"><summary>展开题型总结与迁移</summary><p>本题方法：双前缀DP。</p><p>识别前先核对约束：允许插入、删除、替换，求最少操作数；空串转换也有代价。</p><p>迁移时要重新检查状态含义、能否重复选择、连续性或有序性，不能只因为题名相似就照搬。</p></details></div></article><section class="card day-end"><h2>今日收尾：25分钟闭卷验收</h2><ol><li>5分钟：口述今天三个主要套路，各指出一个适用条件。</li><li>15分钟：从A题随机选一道，不看答案完整写出并验证。</li><li>5分钟：记下卡点，选两道黄/红题放到明天复习。</li></ol><p>如果仍无法解释状态，先回到知识串联与手推。只读过记“已覆盖”，不要直接记独立完成。</p></section><nav class="daylinks"><a href="Day6_图_栈_堆_贪心.html">← Day 6</a><a href="Hot100_一周学习计划.html">回到总计划 →</a></nav></main></div><footer class="foot">本页与总计划分别记录进度，不自动同步。清理浏览器数据可能删除记录。<a href="Hot100_一周学习计划.html#day7">回到总计划</a></footer></div><div class="toast" id="toast" role="status"></div><script>(()=>{
+const key='hot100-lessons-day-7-v1',valid=['covered','green','yellow','red'];let marks={};
+try{const data=JSON.parse(localStorage.getItem(key)||'{}');if(data&&typeof data==='object')marks=data;}catch{}
+const toast=document.getElementById('toast');let timer;
+function notify(t){toast.textContent=t;clearTimeout(timer);timer=setTimeout(()=>toast.textContent='',2200);}
+function save(){try{localStorage.setItem(key,JSON.stringify(marks));}catch{notify('浏览器未允许保存，当前状态只在本次打开期间有效');}}
+function progress(){const n=[...document.querySelectorAll('article.lesson')].filter(c=>valid.includes(marks[c.dataset.id])).length;document.getElementById('lesson-progress').textContent='已记录 '+n+' / '+document.querySelectorAll('article.lesson').length;}
+document.querySelectorAll('.lesson .status').forEach(s=>{s.value=valid.includes(marks[s.dataset.id])?marks[s.dataset.id]:'';s.className='status '+s.value;s.addEventListener('change',()=>{marks[s.dataset.id]=s.value;s.className='status '+s.value;save();progress();});});
+document.getElementById('day-select').addEventListener('change',e=>location.href=e.target.value);
+document.getElementById('problem-select').addEventListener('change',e=>{location.hash=e.target.value;});
+document.getElementById('only-core').addEventListener('change',e=>{document.querySelectorAll('.lesson').forEach(c=>c.hidden=e.target.checked&&c.dataset.core!=='true');});
+function revealTarget(){const card=document.getElementById(location.hash.slice(1));if(card?.classList.contains('lesson')){card.hidden=false;if(card.dataset.core!=='true'){document.getElementById('only-core').checked=false;document.querySelectorAll('.lesson').forEach(c=>c.hidden=false);}document.getElementById('problem-select').value=card.id;requestAnimationFrame(()=>card.scrollIntoView({block:'start'}));}}
+window.addEventListener('hashchange',revealTarget);revealTarget();progress();
+})();</script><details class="reader-settings" id="reader-settings"><summary aria-label="调整阅读字号">Aa 字号</summary><div class="reader-settings-panel"><label for="reading-size">选择舒适的阅读大小</label><select id="reading-size"><option value="comfortable">舒适 · 正文 19 / 代码 17</option><option value="large">大字 · 正文 21 / 代码 19</option><option value="largest">特大 · 正文 23 / 代码 21</option></select><p>同时调整正文、代码和导航。手机舒适模式正文为18px；当前页面会记住你的选择。</p></div></details><script>(()=>{const key='hot100-reading-size-v1';const root=document.documentElement;const select=document.getElementById('reading-size');const choices=['comfortable','large','largest'];let mode='comfortable';try{const saved=localStorage.getItem(key);if(choices.includes(saved))mode=saved;}catch{}root.dataset.readingSize=mode;select.value=mode;select.addEventListener('change',()=>{const settings=document.getElementById('reader-settings');const nodes=[...document.querySelectorAll('article.problem,article.lesson')];const visible=nodes.find(e=>!e.hidden&&e.getBoundingClientRect().bottom>160&&e.getBoundingClientRect().top<innerHeight);const top=visible?.getBoundingClientRect().top;root.dataset.readingSize=select.value;try{localStorage.setItem(key,select.value);}catch{}if(visible)requestAnimationFrame(()=>{window.scrollBy({top:visible.getBoundingClientRect().top-top,behavior:'instant'});});});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('reader-settings').open){document.getElementById('reader-settings').open=false;document.querySelector('#reader-settings summary').focus();}});})();</script><div aria-live="polite" id="sequence-status" role="status"></div><script>(()=>{let timer;const out=document.getElementById('sequence-status');document.addEventListener('click',async e=>{const button=e.target.closest('.study-copy');if(button){const target=document.getElementById(button.dataset.copyId);try{await navigator.clipboard.writeText(target.textContent);out.textContent='代码已复制';}catch{const a=document.createElement('textarea');a.value=target.textContent;document.body.append(a);a.select();const ok=document.execCommand('copy');a.remove();out.textContent=ok?'代码已复制':'复制未获允许，请选中代码手动复制';}clearTimeout(timer);timer=setTimeout(()=>out.textContent='',2200);return;}const link=e.target.closest('a[data-study-jump]');if(link){const target=document.getElementById(link.hash.slice(1));if(target){e.preventDefault();target.querySelector('details')?.setAttribute('open','');target.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'});history.replaceState(null,'',link.hash);}}});window.addEventListener('beforeprint',()=>document.querySelectorAll('.study-section details').forEach(d=>{d.dataset.beforePrintOpen=String(d.open);d.open=true;}));window.addEventListener('afterprint',()=>document.querySelectorAll('.study-section details').forEach(d=>{d.open=d.dataset.beforePrintOpen==='true';delete d.dataset.beforePrintOpen;}));})();</script></body></html>
